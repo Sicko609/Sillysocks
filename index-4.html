@@ -8,7 +8,6 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a14; min-height: 100vh; color: #fff; }
 
-  /* ── GATE ── */
   #gate { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
   .gate-box { max-width: 480px; width: 100%; text-align: center; }
   .logo { font-size: 32px; font-weight: 700; color: #fff; letter-spacing: -1px; }
@@ -28,7 +27,6 @@
   .trust-row { display: flex; justify-content: center; gap: 10px; margin-top: 2.5rem; flex-wrap: wrap; }
   .trust-badge { background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 7px 16px; font-size: 12px; color: rgba(255,255,255,0.5); }
 
-  /* ── CATALOG ── */
   #catalog { display: none; min-height: 100vh; }
   .cat-header { background: #0f0f1e; border-bottom: 0.5px solid rgba(255,255,255,0.08); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 10; }
   .cat-logo { font-size: 20px; font-weight: 700; }
@@ -68,7 +66,6 @@
 </head>
 <body>
 
-<!-- GATE -->
 <div id="gate">
   <div class="gate-box">
     <div class="logo">Silly <span>Socks</span></div>
@@ -89,7 +86,6 @@
   </div>
 </div>
 
-<!-- CATALOG -->
 <div id="catalog">
   <header class="cat-header">
     <div class="cat-logo">Silly <span>Socks</span></div>
@@ -148,8 +144,7 @@ function buyNow(name) {
   const msg = encodeURIComponent('Hi! I was referred and want to buy the ' + name + ' keychain camera. Code: SILLY20');
   window.open(YOUR_INSTAGRAM + '?igsh=dm1message', '_blank');
 }
-
-// ✅ ADD YOUR REFERRERS HERE (case-insensitive)
+ 
 const VALID_REFERRERS = [
   'Tauhid',
   'Songlap',
@@ -176,14 +171,13 @@ function unlock() {
     document.getElementById('errMsg').textContent = 'Please enter a referrer name to continue.';
     return;
   }
-  // Check if name is in the approved referrers list (case-insensitive)
   const isValid = VALID_REFERRERS.some(name => name.toLowerCase() === val.toLowerCase());
   if (!isValid) {
     document.getElementById('errMsg').textContent = '❌ That name is not on our referral list. Ask your bro to refer you!';
     return;
   }
   document.getElementById('errMsg').textContent = '';
-  // Use the correctly-cased name from the list
+  
   const matchedName = VALID_REFERRERS.find(name => name.toLowerCase() === val.toLowerCase());
   document.getElementById('refName').textContent = matchedName;
   document.getElementById('broNameBar').textContent = matchedName;
