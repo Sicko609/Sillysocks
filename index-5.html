@@ -151,31 +151,48 @@
     document.getElementById('refInput').onkeydown = function(e) { if (e.key === 'Enter') tryUnlock(); };
   });
 
-  function tryUnlock() {
+function tryUnlock() {
     var raw = document.getElementById('refInput').value;
     var val = raw.trim().toLowerCase();
     var err = document.getElementById('errMsg');
+    
+    // UI Elements
+    var gate = document.getElementById('gate');
+    var catalog = document.getElementById('catalog');
+    var refName = document.getElementById('refName');
+    var broNameBar = document.getElementById('broNameBar');
+    var refInput = document.getElementById('refInput');
 
+    // 1. Check if input is empty
     if (!val) {
-      err.textContent = 'Please enter a referrer name.';
-      return;
+        err.textContent = 'Please enter a referrer name.';
+        return;
     }
 
-    var found = VALID.indexOf(val);
-    if (found === -1) {
-      err.textContent = '❌ Not on the list. Ask your bro to refer you!';
-      document.getElementById('refInput').value = '';
-      return;
+    // 2. Check if the name is in the VALID array
+    if (VALID.includes(val)) {
+        // Clear errors
+        err.textContent = "";
+        
+        // Hide the gate and show the catalog
+        gate.style.display = "none";
+        catalog.style.display = "block";
+        
+        // Update the personalized welcome text
+        var prettyName = PRETTY[val];
+        refName.innerText = prettyName;
+        broNameBar.innerText = prettyName;
+        
+    } else {
+        // 3. Block entry and show error for invalid names
+        err.textContent = "Invalid referrer name. Please ask a friend!";
+        
+        // Optional: Add a quick shake animation to the input box
+        refInput.style.transform = "translateX(5px)";
+        setTimeout(function() { refInput.style.transform = "translateX(-5px)"; }, 50);
+        setTimeout(function() { refInput.style.transform = "translateX(0)"; }, 100);
     }
-
-    var matched = PRETTY[val];
-    err.textContent = '';
-    document.getElementById('refName').textContent = matched;
-    document.getElementById('broNameBar').textContent = matched;
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('catalog').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
+}
 
   window.buyNow = function(name) {
     window.open(IG, '_blank');
