@@ -1,0 +1,27 @@
+{
+  "name": "sillysocks",
+  "version": "1.0.0",
+  "description": "Silly Socks - Exclusive keychain cameras & socks",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "dev": "npx http-server .",
+    "lint": "echo 'No linting configured'"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.12"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sicko609/Sillysocks.git"
+  },
+  "keywords": [
+    "sillysocks",
+    "keychain",
+    "camera",
+    "ecommerce"
+  ],
+  "author": "",
+  "license": "ISC"
+}
