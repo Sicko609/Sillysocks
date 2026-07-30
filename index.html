@@ -14,7 +14,7 @@
   --bg: #0d0a17;
   --bg-2: #170f28;
   --text: #ffffff;
-  --text-muted: #b3a8c4;
+  --text-muted: #aaaaaa;
   --accent-1: #ef2fb0;
   --accent-2: #29e0e8;
   --accent-3: #ffcf4d;
@@ -100,10 +100,24 @@ body {
 .hero-prompt { font-family: var(--font-retro); font-size: clamp(10px, 3vw, 14px); color: var(--accent-3); animation: blink 1s steps(2, start) infinite; z-index: 10; text-align: center; padding: 0 10px; line-height: 1.5; }
 @keyframes blink { to { visibility: hidden; } }
 
-.hero-cta-group { z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 30px; }
-.hero-enter-btn { font-family: var(--font-retro); font-size: clamp(11px, 3vw, 14px); background: linear-gradient(135deg, var(--accent-3), #ffb020); color: #1a0f00; border: none; border-radius: var(--radius); padding: 16px 30px; box-shadow: 0 10px 30px rgba(255, 176, 32, 0.35); cursor: pointer; text-transform: uppercase; transition: all 0.35s var(--ease); }
-.hero-enter-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(255, 176, 32, 0.5); }
-.hero-game-link { font-family: var(--font-retro); font-size: 9px; color: var(--accent-2); background: transparent; border: none; text-decoration: underline; cursor: pointer; letter-spacing: 0.5px; padding: 6px; }
+.arcade-blocks { z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; padding: 0 20px; margin-top: 20px;}
+.arcade-btn {
+  width: 100%; max-width: 320px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid var(--accent-1);
+  padding: 20px 15px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 6px 6px 0 var(--accent-1);
+}
+.arcade-btn:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent-2); border-color: var(--accent-2); }
+.arcade-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+.arcade-btn.shop { border-color: #0f0; box-shadow: 6px 6px 0 #0f0; }
+.arcade-btn.shop:hover { box-shadow: 10px 10px 0 #fff; border-color: #fff; }
+.arcade-btn .btn-title { font-family: var(--font-retro); font-size: 14px; color: var(--accent-3); text-shadow: 2px 2px 0 #000; }
+.arcade-btn.shop .btn-title { color: #0f0; }
+.arcade-btn .btn-sub { font-family: var(--font-main); font-size: 11px; font-weight: 900; color: #fff; letter-spacing: 1px; text-align: center;}
 
 #sock-rain { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 1;}
 .falling-sock { position: absolute; top: -10%; font-size: 35px; animation: dropSock linear infinite; filter: drop-shadow(0 0 10px var(--accent-1)); }
@@ -133,16 +147,48 @@ body {
 .retro-input, .retro-select { flex: 1; min-width: 0; padding: 12px; background: #000; border: 3px solid var(--card-border); color: #0f0; font-family: var(--font-retro); font-size: 10px; outline: none; box-shadow: inset 0 0 10px rgba(0,255,0,0.2); text-transform: uppercase; width: 100%;}
 .retro-input:focus, .retro-select:focus { border-color: var(--accent-2); box-shadow: inset 0 0 15px var(--accent-2); }
 
-.checkout-hype-banner { background: rgba(41, 224, 232, 0.1); border: 1px solid rgba(41, 224, 232, 0.4); border-radius: 12px; color: #4dfff0; padding: 14px; text-align: center; font-size: 11px; font-family: var(--font-retro); line-height: 1.5; margin-bottom: 15px;}
+.checkout-hype-banner { background: rgba(41, 224, 232, 0.1); border: 1px solid rgba(41, 224, 232, 0.4); border-radius: 12px; color: #4dfff0; padding: 14px; text-align: center; font-size: 11px; font-family: var(--font-retro); line-height: 1.5; margin-bottom: 12px;}
 
-.tc-box { height: 90px; overflow-y: auto; background: #000; border: 2px dashed var(--accent-1); padding: 10px; font-size: 9px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; -webkit-overflow-scrolling: touch;}
+/* Free Delivery Urgency Line inside Checkout (Cameras Only) */
+.checkout-urgency-banner {
+  background: #000;
+  border: 2px solid #ffea00;
+  color: #ffea00;
+  padding: 10px 12px;
+  font-family: var(--font-retro);
+  font-size: 9px;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  box-shadow: 0 0 12px rgba(255, 234, 0, 0.2);
+}
+.checkout-urgency-banner span { color: #0f0; text-shadow: 0 0 8px #0f0; }
+
+/* Total Amount Display Box */
+.checkout-total-box {
+  background: #000;
+  border: 2px solid var(--accent-3);
+  padding: 14px 16px;
+  text-align: center;
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: var(--accent-3);
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: inset 0 0 12px rgba(255, 207, 77, 0.15);
+}
+.checkout-total-val { font-size: 18px; color: #0f0; text-shadow: 0 0 10px #0f0; }
+
+.tc-box { height: 90px; overflow-y: auto; background: #000; border: 2px dashed var(--accent-1); padding: 10px; font-size: 9px; color: #ccc; line-height: 1.6; margin-bottom: 10px; -webkit-overflow-scrolling: touch;}
 .tc-box strong { color: var(--accent-1); font-weight: 900;}
 .checkbox-row { display: flex; align-items: flex-start; gap: 10px; font-size: 10px; font-weight: 800; line-height: 1.4; color: #fff;}
 .checkbox-row input { appearance: none; width: 18px; height: 18px; border: 2px solid var(--card-border); background: var(--bg); cursor: pointer; min-width: 18px; margin-top: 2px;}
 .checkbox-row input:checked { background: var(--accent-3); border-color: var(--accent-3); box-shadow: inset 0 0 0 2px #000; }
 .radio-group { display: flex; gap: 15px; flex-wrap: wrap; background: #000; padding: 10px; border: 2px solid var(--card-border); }
 .radio-group label { display: flex; align-items: center; gap: 8px; color: #fff; font-family: var(--font-main); font-size: 11px; margin-top: 0; font-weight: 800; cursor: pointer;}
-.bkash-info-box { background: rgba(239, 47, 176, 0.08); border: 1px solid rgba(239, 47, 176, 0.35); padding: 14px; border-radius: 12px; margin-top: 5px; display: flex; flex-direction: column; gap: 8px; }
+.bkash-info-box { background: #000; border: 2px dashed var(--accent-1); padding: 12px; border-radius: 4px; margin-top: 5px; display: flex; flex-direction: column; gap: 8px; }
 .bkash-number { font-family: var(--font-retro); font-size: 11px; color: var(--accent-3); text-shadow: 0 0 8px var(--accent-3); letter-spacing: 1px; }
 
 /* CHECKOUT TERMINAL ANIMATION */
@@ -177,7 +223,7 @@ body {
 .cat-body { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem 0; }
 .section-label { font-family: var(--font-retro); font-size: 14px; color: var(--text); margin-bottom: 2rem; text-shadow: 2px 2px 0 var(--accent-1); line-height: 1.4; }
 
-/* --- DYNAMIC FLAGSHIP CAMERA LAYOUT (REPLACES GRID) --- */
+/* --- DYNAMIC FLAGSHIP CAMERA LAYOUT --- */
 .explainer-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 22px; margin-bottom: 30px; box-shadow: var(--shadow-soft); }
 .explainer-title { font-family: var(--font-retro); font-size: 12px; color: var(--accent-3); margin-bottom: 14px; }
 .explainer-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
@@ -236,23 +282,16 @@ body {
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.in-view { opacity: 1; transform: translateY(0); }
 
-/* --- SOCIAL PROOF TOAST & FLOATING BUTTONS --- */
+/* --- IG & WA FLOATING BUTTONS --- */
 .ig-float-btn { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent-1), #b5158a); display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; z-index: 9999; box-shadow: 0 10px 26px rgba(239, 47, 176, 0.4); transition: all 0.3s var(--ease); border-radius: 50%;}
 .wa-float-btn { position: fixed; bottom: 82px; right: 20px; width: 52px; height: 52px; background: #25D366; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; z-index: 9999; box-shadow: 0 10px 26px rgba(37, 211, 102, 0.4); transition: all 0.3s var(--ease); border-radius: 50%;}
 .wa-float-btn svg, .ig-float-btn svg { width: 26px; height: 26px; fill: #fff; }
-
-#social-proof-toast { position: fixed; bottom: 75px; left: 20px; background: var(--card-bg); backdrop-filter: blur(14px); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; gap: 12px; z-index: 9998; box-shadow: var(--shadow-soft); transform: translateX(-150%); transition: transform 0.6s var(--ease); max-width: 320px;}
-#social-proof-toast.show { transform: translateX(0); }
-.toast-img { width: 45px; height: 45px; object-fit: cover; border-radius: 10px; background: #fff;}
-.toast-text { font-family: var(--font-main); font-size: 10px; line-height: 1.4; color: #fff; font-weight: 700;}
-.toast-time { font-size: 8px; color: var(--accent-3); font-family: var(--font-retro); margin-top: 4px;}
 
 @media(max-width: 480px) {
   .input-row { flex-direction: column; align-items: stretch; }
   .cat-header { flex-direction: column; align-items: center; text-align: center; padding: 1rem;}
   .welcome-pill { justify-content: center; }
   .retro-box { padding: 1.5rem 1rem; width: 95%; }
-  #social-proof-toast { bottom: 85px; left: 10px; right: 10px; max-width: calc(100% - 20px); }
   .wa-float-btn { bottom: 78px; }
   .flagship-wrap { padding: 15px; }
   .flagship-img-wrap { height: 260px; }
@@ -275,9 +314,15 @@ body {
   <div id="sock-rain"></div>
   <h1 class="hero-logo">SILLY SOCKS</h1>
   <p class="hero-prompt">>> THE NOSTALGIA VAULT IS OPEN <<</p>
-  <div class="hero-cta-group">
-    <button class="hero-enter-btn" onclick="event.stopPropagation(); leaveHero('catalog');">🛒 ENTER THE SHOP</button>
-    <button class="hero-game-link" onclick="event.stopPropagation(); leaveHero('game');">🎮 or play a quick game for a 10% discount code</button>
+  <div class="arcade-blocks">
+    <button class="arcade-btn shop" onclick="event.stopPropagation(); leaveHero('catalog');">
+      <span class="btn-title">🛒 QUICK BUY</span>
+      <span class="btn-sub">ENTER THE SHOP DIRECTLY</span>
+    </button>
+    <button class="arcade-btn" onclick="event.stopPropagation(); leaveHero('game');">
+      <span class="btn-title">🎮 BOSS FIGHT</span>
+      <span class="btn-sub">BEAT BOT FOR 10% OFF CODE</span>
+    </button>
   </div>
 </div>
 
@@ -298,9 +343,8 @@ body {
       <div class="ttt-cell" onclick="makeMove(8)"></div>
     </div>
     <div class="btn-group">
-      <button class="retro-btn" id="resetTttBtn" style="display:none;" onclick="resetBoard()">REMATCH</button>
-      <button class="retro-btn" id="skipTttBtn" onclick="showGate(false)">I HAVE A CODE</button>
-      <button class="retro-btn" onclick="skipToCatalog()" style="background:transparent; border:1px solid #fff; box-shadow:none;">SKIP TO SHOP</button>
+      <button class="retro-btn" id="resetTttBtn" style="display:none;" onclick="resetBoard()">TRY AGAIN (IF YOU DARE)</button>
+      <button class="retro-btn" id="skipToCatBtn" onclick="skipToCatalog()" style="background:#333; border-color:#555;">SKIP TO SHOP (GIVE UP)</button>
     </div>
   </div>
 </div>
@@ -332,6 +376,12 @@ body {
       <div id="checkout-savings-banner" class="checkout-hype-banner">
         ⚡ YOU ARE SAVING ৳XXX TODAY + FREE SHIPPING ⚡
       </div>
+
+      <!-- Free Delivery Urgency Countdown Banner (Cameras Only) -->
+      <div id="checkout-urgency-line" class="checkout-urgency-banner">
+        🚚 ORDER WITHIN THE NEXT <span id="checkoutTimerText">--:--:--</span> TO GET FREE DELIVERY NATIONWIDE!
+      </div>
+
       <div class="gate-title" style="color: var(--accent-3);">SECURE CHECKOUT</div>
       
       <form id="orderForm" class="checkout-form">
@@ -344,22 +394,27 @@ body {
         <label>> DELIVERY ADDRESS *</label>
         <textarea name="Delivery Address" class="retro-input" required placeholder="HOUSE, ROAD, DHAKA..." rows="3" style="resize:none; font-family: var(--font-main);"></textarea>
         
-        <!-- Locked Color Input (Hidden dropdown logic simplified for user) -->
         <label id="lbl-color">> SELECTED COLOR / PRODUCT *</label>
         <select name="Product Color" id="form-color" class="retro-select" style="pointer-events: none; opacity: 0.8;"></select>
 
         <label id="lbl-addons">> PACKAGE SELECTION *</label>
-        <select name="Add-ons" id="form-addons" class="retro-select" required onchange="updateCheckoutSavingsBanner()"></select>
+        <select name="Add-ons" id="form-addons" class="retro-select" required onchange="updateCheckoutTotals()"></select>
 
         <label>> DISCOUNT APPLIED</label>
         <input type="text" name="BRO CODE" id="form-brocode" class="retro-input" placeholder="NONE" readonly style="pointer-events: none; opacity: 0.8;" />
 
         <label>> QUANTITY *</label>
-        <select name="Quantity" class="retro-select" required>
+        <select name="Quantity" class="retro-select" required onchange="updateCheckoutTotals()">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
         </select>
+
+        <!-- Dynamic Total Amount Display Box -->
+        <div class="checkout-total-box" id="checkout-total-box">
+          <span>TOTAL AMOUNT TO PAY:</span>
+          <span class="checkout-total-val" id="checkout-total-val">৳1,799</span>
+        </div>
 
         <label>> PAYMENT METHOD *</label>
         <div class="radio-group">
@@ -388,7 +443,7 @@ body {
       </form>
     </div>
 
-    <!-- Cool Retro Terminal Animation (Hidden by default) -->
+    <!-- Retro Terminal Animation -->
     <div id="checkout-terminal">
       <div class="term-line" id="tl-1">> INITIATING SECURE UPLOAD...</div>
       <div class="term-line" id="tl-2">> ENCRYPTING BUYER DATA [256-BIT]... <span class="term-blink" style="color:#fff;">OK</span></div>
@@ -556,6 +611,7 @@ let appliedBroCode = "";
 let soundEnabled = false;
 let gameDiscountActive = false; 
 let bgmTimeout = null;
+let isMirrorCheckout = false;
 
 function initAudio() {
   if (isPoweredOn) return;
@@ -858,31 +914,66 @@ function updateLeaderboard() {
 }
 function renderLeaderboard() { updateLeaderboard(); }
 
-// Dynamic Checkout Savings Banner Updater
-function updateCheckoutSavingsBanner() {
+// --- Dynamic Checkout Totals & Savings Banner Updater ---
+function updateCheckoutTotals() {
   const addonSelect = document.getElementById('form-addons');
   const banner = document.getElementById('checkout-savings-banner');
-  let savings = 0;
+  const totalValSpan = document.getElementById('checkout-total-val');
+  const urgencyLine = document.getElementById('checkout-urgency-line');
+  const qtySelect = document.querySelector('select[name="Quantity"]');
+  const qty = parseInt(qtySelect ? qtySelect.value : 1) || 1;
+  const addonVal = addonSelect ? addonSelect.value : "";
   
-  if (isMirrorCheckout) {
-     if (addonSelect.value.includes("30 cm")) { savings = 501; } 
-     else if (addonSelect.value.includes("45 cm")) { savings = 601; } 
-     
-     banner.innerHTML = `⚡ YOU ARE SAVING ৳${savings} TODAY ⚡<br><span style="color:#ff0055; font-size:10px; font-family:var(--font-main);">+ ৳200 DELIVERY CHARGE (HEAVY/FRAGILE ITEM)</span>`;
-     banner.style.borderColor = "#ff0055";
-     banner.style.color = "#fff";
-     banner.style.textShadow = "none";
-  } else {
-    if (addonSelect.value.includes("1619")) { savings = 580; } 
-    else if (addonSelect.value.includes("2249")) { savings = 750; } 
-    else if (addonSelect.value.includes("Without SD card 1799")) { savings = 400; } 
-    else if (addonSelect.value.includes("With 8GB SD card 2499")) { savings = 500; } 
-    else { savings = 400; }
+  let unitPrice = 1799;
+  let unitSavings = 400;
 
-    banner.innerHTML = `⚡ YOU ARE SAVING ৳${savings} TODAY + FREE SHIPPING ⚡`;
+  if (isMirrorCheckout) {
+    // Strictly hide free delivery urgency timer for decor items!
+    if (urgencyLine) urgencyLine.style.display = 'none';
+    
+    if (addonVal.includes("30 cm")) {
+      unitPrice = gameDiscountActive ? 2789 : 3099;
+      unitSavings = 501;
+    } else if (addonVal.includes("45 cm")) {
+      unitPrice = gameDiscountActive ? 3239 : 3599;
+      unitSavings = 601;
+    }
+    
+    let itemTotal = unitPrice * qty;
+    let grandTotal = itemTotal + 200; // ৳200 Delivery charge
+    
+    banner.innerHTML = `⚡ YOU ARE SAVING ৳${unitSavings * qty} TODAY ⚡<br><span style="color:#ff0055; font-size:10px; font-family:var(--font-main);">+ ৳200 DELIVERY CHARGE (HEAVY/FRAGILE ITEM)</span>`;
+    banner.style.borderColor = "#ff0055";
+    banner.style.color = "#fff";
+    banner.style.textShadow = "none";
+
+    totalValSpan.innerHTML = `৳${grandTotal.toLocaleString()} <span style="font-size:9px; color:#ff0055; font-family:var(--font-main);">(Includes ৳200 Delivery)</span>`;
+  } else {
+    // Show free delivery urgency timer for cameras!
+    if (urgencyLine) urgencyLine.style.display = 'block';
+    
+    if (addonVal.includes("1619")) {
+      unitPrice = 1619;
+      unitSavings = 580;
+    } else if (addonVal.includes("2249")) {
+      unitPrice = 2249;
+      unitSavings = 750;
+    } else if (addonVal.includes("1799")) {
+      unitPrice = 1799;
+      unitSavings = 400;
+    } else if (addonVal.includes("2499")) {
+      unitPrice = 2499;
+      unitSavings = 500;
+    }
+
+    let grandTotal = unitPrice * qty;
+
+    banner.innerHTML = `⚡ YOU ARE SAVING ৳${unitSavings * qty} TODAY + FREE SHIPPING ⚡`;
     banner.style.borderColor = "rgba(41, 224, 232, 0.4)";
     banner.style.color = "#4dfff0";
     banner.style.textShadow = "none";
+
+    totalValSpan.innerHTML = `৳${grandTotal.toLocaleString()} <span style="font-size:9px; color:#0f0; font-family:var(--font-main);">(FREE SHIPPING)</span>`;
   }
 }
 
@@ -895,7 +986,6 @@ function openCheckout(itemColor, isWithSD) {
   setTimeout(() => {
     document.getElementById('catalog').style.display = "none";
     
-    // Locked Color Input
     let colorDropdown = document.getElementById('form-color');
     colorDropdown.innerHTML = `<option value="${itemColor}">${itemColor}</option>`;
     colorDropdown.value = itemColor;
@@ -919,7 +1009,7 @@ function openCheckout(itemColor, isWithSD) {
     document.getElementById('lbl-addons').innerText = "> PACKAGE SELECTION *";
     document.getElementById('form-brocode').value = gameDiscountActive ? "ARCADE10" : "NONE";
     
-    updateCheckoutSavingsBanner();
+    updateCheckoutTotals();
 
     checkoutScreen.style.display = "flex";
     setTimeout(() => { 
@@ -963,7 +1053,7 @@ function openCheckoutMirror() {
     document.getElementById('lbl-addons').innerText = "> MIRROR SIZE *";
     document.getElementById('form-brocode').value = gameDiscountActive ? "ARCADE10" : "NONE";
     
-    updateCheckoutSavingsBanner();
+    updateCheckoutTotals();
 
     checkoutScreen.style.display = "flex";
     setTimeout(() => { 
@@ -1009,7 +1099,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
   const term = document.getElementById('checkout-terminal');
   term.style.display = 'block';
 
-  // Prepare Payload
   var googleScriptURL = "https://script.google.com/macros/s/AKfycbyDypfbtTiAInwL_VfCtUOIWNp02PANmIf7Svj2uj1JUVCeaR-fqE4gLm6jA-Ssv4M/exec";
   var discordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; 
 
@@ -1075,7 +1164,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
     body: searchParams.toString()
   })
   .then(response => {
-    // Wait for minimum animation time (3.5 seconds total)
     setTimeout(() => {
       document.getElementById('tl-5').style.display = 'block';
       soundWin();
@@ -1144,7 +1232,6 @@ function closeSuccessScreen() {
     }, 50);
   }, 400);
 }
-
 
 // --- High-Converting Flagship Single Product Render Logic ---
 function getPriceHTML(isWithSD) {
@@ -1223,7 +1310,13 @@ function updateDispatchTimer() {
   var m = Math.floor((diff % 3600000) / 60000);
   var s = Math.floor((diff % 60000) / 1000);
   var pad = n => n.toString().padStart(2, '0');
-  document.getElementById('timerText').innerText = pad(h) + ':' + pad(m) + ':' + pad(s);
+  var formattedTime = pad(h) + ':' + pad(m) + ':' + pad(s);
+  
+  // Update both page and checkout timers
+  var timerEl = document.getElementById('timerText');
+  var chkTimerEl = document.getElementById('checkoutTimerText');
+  if (timerEl) timerEl.innerText = formattedTime;
+  if (chkTimerEl) chkTimerEl.innerText = formattedTime;
 }
 updateDispatchTimer();
 setInterval(updateDispatchTimer, 1000);
