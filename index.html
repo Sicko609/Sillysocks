@@ -143,7 +143,7 @@ body {
 .checkout-form { display: flex; flex-direction: column; gap: 12px; text-align: left; margin-top: 5px;}
 .checkout-form label { font-size: 9px; font-family: var(--font-retro); color: var(--accent-2); margin-top: 6px;}
 
-.checkout-hype-banner { background: rgba(0, 255, 0, 0.15); border: 2px dashed #0f0; color: #0f0; padding: 12px; text-align: center; font-size: 11px; font-family: var(--font-retro); line-height: 1.5; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,255,0,0.2); text-shadow: 0 0 5px #0f0;}
+.checkout-hype-banner { background: rgba(0, 255, 0, 0.15); border: 2px dashed #0f0; color: #0f0; padding: 12px; text-align: center; font-size: 11px; font-family: var(--font-retro); line-height: 1.5; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,255,0,0.2); transition: all 0.3s;}
 .tc-box { height: 90px; overflow-y: auto; background: #000; border: 2px dashed var(--accent-1); padding: 10px; font-size: 9px; color: #ccc; line-height: 1.6; margin-bottom: 10px; -webkit-overflow-scrolling: touch;}
 .tc-box strong { color: var(--accent-1); font-weight: 900;}
 .checkbox-row { display: flex; align-items: flex-start; gap: 10px; font-size: 10px; font-weight: 800; line-height: 1.4; color: #fff;}
@@ -151,8 +151,6 @@ body {
 .checkbox-row input:checked { background: var(--accent-3); border-color: var(--accent-3); box-shadow: inset 0 0 0 2px #000; }
 .radio-group { display: flex; gap: 15px; flex-wrap: wrap; background: #000; padding: 10px; border: 2px solid var(--card-border); }
 .radio-group label { display: flex; align-items: center; gap: 8px; color: #fff; font-family: var(--font-main); font-size: 11px; margin-top: 0; font-weight: 800; cursor: pointer;}
-
-/* bKash Alert Box - Enhanced Contrast for Day Mode */
 .bkash-info-box { background: #000; border: 2px dashed var(--accent-1); padding: 12px; border-radius: 4px; margin-top: 5px; display: flex; flex-direction: column; gap: 8px; }
 .bkash-number { font-family: var(--font-retro); font-size: 11px; color: var(--accent-3); text-shadow: 0 0 8px var(--accent-3); letter-spacing: 1px; }
 
@@ -165,7 +163,7 @@ body {
 .blink-text { animation: blink 1s steps(2, start) infinite; }
 
 /* --- SCREEN 5: CATALOG UI --- */
-#catalog { display: none; min-height: 100vh; opacity: 0; transform: translateY(100px); transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); padding-bottom: 80px; z-index: 10; position: relative;}
+#catalog { display: none; min-height: 100vh; opacity: 0; transform: translateY(100px); transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); padding-bottom: 50px; z-index: 10; position: relative;}
 #catalog.visible { opacity: 1; transform: translateY(0); }
 .cat-header { background: var(--card-bg); border-bottom: 4px solid var(--card-border); padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-retro); }
 .header-logo { font-family: var(--font-retro); font-size: clamp(16px, 4vw, 20px); color: var(--accent-2); text-shadow: 2px 2px 0 var(--accent-1); }
@@ -173,14 +171,12 @@ body {
 .theme-toggle-btn { background: var(--bg); color: var(--text); font-weight: 900; font-family: var(--font-retro); font-size: 8px; text-transform: uppercase; cursor: pointer; border: 2px solid var(--accent-3); padding: 6px 10px; box-shadow: 2px 2px 0 var(--accent-3); transition: all 0.2s; margin: 0; }
 .theme-toggle-btn:active { transform: translate(2px, 2px); box-shadow: none; }
 .theme-toggle-btn:hover { background: var(--accent-3); color: #000; }
-
 .ticker-wrap { width: 100%; overflow: hidden; background: #000; color: var(--accent-3); padding: 8px 0; font-family: var(--font-retro); font-size: 10px; border-bottom: 2px dashed var(--accent-3); white-space: nowrap; }
 .ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; }
 .ticker span { margin-right: 30px; }
 @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
 
-.disc-bar { background: var(--accent-1); padding: 10px 1rem; text-align: center; font-size: 10px; font-family: var(--font-retro); color: #fff; line-height: 1.6; border-bottom: 4px solid #000; transition: background 0.3s;}
-
+.disc-bar { background: var(--accent-1); padding: 10px 1rem; text-align: center; font-size: 10px; font-family: var(--font-retro); color: #fff; line-height: 1.6; border-bottom: 4px solid #000; }
 .cat-body { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem 0; }
 .section-label { font-family: var(--font-retro); font-size: 14px; color: var(--text); margin-bottom: 2rem; text-shadow: 2px 2px 0 var(--accent-1); line-height: 1.4; }
 
@@ -195,7 +191,6 @@ body {
 .cam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
 .cam-card { background: var(--card-bg); border: 4px solid var(--card-border); position: relative; transition: all 0.2s ease; box-shadow: 6px 6px 0 var(--accent-1); display: flex; flex-direction: column;}
 @media (hover: hover) { .cam-card:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent-2); } .cam-card:hover .cam-img { transform: scale(1.08); filter: contrast(110%); } }
-
 .img-wrapper { width: 100%; height: 220px; border-bottom: 4px solid var(--card-border); background: #ffffff; overflow: hidden; position: relative;}
 .cam-img { width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: transform 0.5s; }
 
@@ -233,15 +228,13 @@ body {
 .page-nav { display: flex; gap: 10px; padding: 0 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap;}
 .page-tab { background: var(--bg); border: 3px solid var(--card-border); padding: 10px 15px; font-family: var(--font-retro); font-size: 9px; color: var(--text); cursor: pointer; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; line-height: 1.4;}
 .page-tab.active { background: var(--accent-1); color: #fff; transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--card-border); }
+
 .footer { text-align: center; padding: 3rem 1.5rem; font-family: var(--font-retro); font-size: 9px; color: var(--text-muted); border-top: 2px dashed var(--card-border); margin-top: 3rem; line-height: 2;}
 
-/* --- IG & WA FLOATING BUTTONS --- */
-.floating-actions { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 9999; }
-.float-btn { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 3px solid var(--card-border); cursor: pointer; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; border-radius: 50%; }
-.float-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
-.float-btn svg { width: 26px; height: 26px; fill: #fff; }
-.ig-btn { background: var(--accent-1); }
-.wa-btn { background: #25D366; border-color: #000; box-shadow: 4px 4px 0 #000; }
+/* --- IG FLOATING BUTTON --- */
+.ig-float-btn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--accent-1); display: flex; align-items: center; justify-content: center; border: 3px solid var(--card-border); cursor: pointer; z-index: 9999; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; border-radius: 50%;}
+.ig-float-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+.ig-float-btn svg { width: 24px; height: 24px; fill: #fff; }
 
 @media(max-width: 480px) {
   .input-row { flex-direction: column; align-items: stretch; }
@@ -316,11 +309,13 @@ body {
     <div class="gate-title" id="gate-title">SYSTEM LOCKED</div>
     <p class="gate-sub" id="gate-sub" style="margin-bottom:1.5rem;">ENTER PLAYER 1 REFERRAL CODE</p>
     
+    <!-- Code Input Area -->
     <div class="input-row" id="gate-input-area">
       <input id="refInput" class="retro-input" type="text" placeholder="CODE..." autocomplete="off" />
       <button class="retro-btn" id="enterBtn" onclick="checkCode()" style="margin:0; width:100px;">START</button>
     </div>
 
+    <!-- Leaderboard Initials Area -->
     <div class="input-row" id="lb-input-area" style="display:none;">
       <input id="lbInput" class="retro-input" type="text" placeholder="INITIALS..." maxlength="10" autocomplete="off" />
       <button class="retro-btn" onclick="saveInitialsAndEnter()" style="margin:0; width:100px;">SAVE</button>
@@ -334,6 +329,7 @@ body {
 <div id="checkout-screen" class="screen-layer">
   <div class="retro-box" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
     
+    <!-- CRO: Dynamic Savings Banner -->
     <div id="checkout-savings-banner" class="checkout-hype-banner">
       ⚡ YOU ARE SAVING ৳XXX TODAY + FREE SHIPPING ⚡
     </div>
@@ -372,6 +368,7 @@ body {
         <label><input type="radio" name="Payment Method" value="Bkash" required onclick="toggleBkash(true)"> Bkash</label>
       </div>
 
+      <!-- bKash Send Money Notification Banner & TRX Input -->
       <div id="bkash-field" class="bkash-info-box" style="display:none;">
         <div class="bkash-number">> SEND MONEY (PERSONAL): 01961515240</div>
         <label style="margin-top: 4px; color: #fff;">> BKASH TRANSACTION ID *</label>
@@ -396,6 +393,7 @@ body {
 
       <button type="submit" id="submitOrderBtn" class="retro-btn" style="background: var(--accent-3); color: #000; font-size: 12px; margin-top: 15px;">CONFIRM ORDER</button>
       
+      <!-- Trust Signals for CRO -->
       <div class="trust-badges">
         <span>🔒 100% SECURE</span>
         <span>🚚 FAST COD</span>
@@ -435,7 +433,7 @@ body {
     </div>
   </header>
 
-  <!-- Arcade Leaderboard Ticker (FIXED SCROLL DUPLICATION) -->
+  <!-- Arcade Leaderboard Ticker -->
   <div class="ticker-wrap" id="leaderboardWrap">
     <div class="ticker" id="lbTickerContainer">
       <span>👑 ARCADE CHAMPIONS: #1 MAFRUHA ⚡ #2 ABID ⚡ #3 TASHIN ⚡ #4 SIAM 👑</span>
@@ -444,7 +442,7 @@ body {
   </div>
   
   <div class="disc-bar" id="topDiscBar">
-    ⚡ HUGE SAVINGS DROPPED ⚡ FREE DELIVERY UNLOCKED ⚡ VIP ACCESS GRANTED
+    ⚡ HUGE SAVINGS DROPPED ⚡ FREE DELIVERY ON CAMS ⚡ VIP ACCESS GRANTED
   </div>
   
   <div class="page-nav">
@@ -455,8 +453,7 @@ body {
   <!-- LVL 1 (CAMERAS) -->
   <div class="cat-body" id="page1Body">
     <div class="section-label">> THE NOSTALGIA VAULT</div>
-    
-    <!-- Explainer box with fixed Day Mode text color -->
+
     <div class="explainer-box">
       <div class="explainer-title">> WHAT YOU'RE GETTING</div>
       <div class="explainer-list">
@@ -473,6 +470,7 @@ body {
   <div class="cat-body" id="page2Body" style="display:none;">
     <div class="section-label">> INDUSTRIAL AESTHETICS</div>
     <div id="mirrorGrid" class="cam-grid">
+      <!-- Traffic Mirror Hardcoded Card -->
       <div class="cam-card">
         <div class="img-wrapper">
           <div class="live-watch"><div class="dot"></div> WATCHING: 18</div>
@@ -486,7 +484,7 @@ body {
           <div class="hype-text" style="color: #0f0;">78% CLAIMED</div>
 
           <div class="cam-perks">
-            <span class="perk perk-highlight">>> FREE DELIVERY NATIONWIDE</span>
+            <span class="perk" style="color: #ff0055; text-shadow: 0 0 5px #ff0055;">>> + ৳200 HEAVY ITEM DELIVERY</span>
             <span class="perk">>> MYSTERY GIFT CHANCE</span>
           </div>
           <div class="variant-toggle">
@@ -516,17 +514,11 @@ body {
   </div>
 </div>
 
-<!-- Floating Action Buttons -->
-<div class="floating-actions">
-  <div class="float-btn wa-btn" onclick="window.open('https://wa.me/8801961515240?text=Hi!%20I%20have%20a%20question%20about%20Silly%20Socks', '_blank')" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-  </div>
-  <div class="float-btn ig-btn" onclick="window.open('https://www.instagram.com/your.sillysocks/', '_blank')" aria-label="Instagram">
-    <svg viewBox="0 0 24 24">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 1.76-6.98 6.276-.058 1.281-.072 1.688-.072 4.947s.014 3.666.072 4.947c.2 4.515 2.622 6.076 6.98 6.276 1.28.058 1.687.072 4.947.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-1.76 6.979-6.276.059-1.281.073-1.689.073-4.947 0-3.258-.014-3.667-.072-4.947-.196-4.516-2.624-6.076-6.979-6.276-1.28-.058-1.688-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-    </svg>
-  </div>
-</div>
+<button class="ig-float-btn" onclick="window.open('https://www.instagram.com/your.sillysocks/', '_blank')">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 1.76-6.98 6.276-.058 1.281-.072 1.688-.072 4.947s.014 3.666.072 4.947c.2 4.515 2.622 6.076 6.98 6.276 1.28.058 1.687.072 4.947.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-1.76 6.979-6.276.059-1.281.073-1.689.073-4.947 0-3.258-.014-3.667-.072-4.947-.196-4.516-2.624-6.076-6.979-6.276-1.28-.058-1.688-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </svg>
+</button>
 
 <script>
 // ==========================================
@@ -537,6 +529,7 @@ let isPoweredOn = false;
 let isBgmRunning = false;
 let appliedBroCode = "";
 let gameDiscountActive = false; 
+let isMirrorCheckout = false;
 
 function initAudio() {
   if (isPoweredOn) return;
@@ -626,6 +619,7 @@ createSockRain();
 let hasEnteredHero = false;
 const heroScreen = document.getElementById('hero-screen');
 const tttScreen = document.getElementById('tictactoe-screen');
+const gate = document.getElementById('gate');
 const catalog = document.getElementById('catalog');
 const checkoutScreen = document.getElementById('checkout-screen');
 const successScreen = document.getElementById('success-screen');
@@ -654,7 +648,7 @@ function leaveHero(target) {
   }
 }
 
-// --- Tic-Tac-Toe Game Logic ---
+// --- Tic-Tac-Toe Game Logic (IMPOSSIBLE MINIMAX BOT) ---
 let board = ["", "", "", "", "", "", "", "", ""];
 let gameActive = true;
 const cells = document.querySelectorAll('.ttt-cell');
@@ -686,32 +680,51 @@ function makeMove(index) {
   setTimeout(botMove, 600);
 }
 
-// Hard Bot Logic
-function getBestMove() {
-  let move = findWinningMove("O");
-  if (move !== -1) return move;
-  move = findWinningMove("X");
-  if (move !== -1) return move;
-  if (board[4] === "") return 4;
-  let corners = [0, 2, 6, 8].filter(i => board[i] === "");
-  if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
-  let emptyIndices = [];
-  for(let i=0; i<9; i++) { if(board[i] === "") emptyIndices.push(i); }
-  return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+function minimax(testBoard, depth, isMaximizing) {
+  if (checkWin("O", testBoard)) return 10 - depth;
+  if (checkWin("X", testBoard)) return depth - 10;
+  if (testBoard.indexOf("") === -1) return 0;
+
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (testBoard[i] === "") {
+        testBoard[i] = "O";
+        let score = minimax(testBoard, depth + 1, false);
+        testBoard[i] = "";
+        bestScore = Math.max(score, bestScore);
+      }
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (testBoard[i] === "") {
+        testBoard[i] = "X";
+        let score = minimax(testBoard, depth + 1, true);
+        testBoard[i] = "";
+        bestScore = Math.min(score, bestScore);
+      }
+    }
+    return bestScore;
+  }
 }
 
-function findWinningMove(player) {
-  const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-  for(let i=0; i<winPatterns.length; i++) {
-    let p = winPatterns[i];
-    let pCount = 0, emptyIdx = -1;
-    for(let j=0; j<3; j++) {
-      if(board[p[j]] === player) pCount++;
-      else if(board[p[j]] === "") emptyIdx = p[j];
+function getBestMove() {
+  let bestScore = -Infinity;
+  let move;
+  for (let i = 0; i < 9; i++) {
+    if (board[i] === "") {
+      board[i] = "O";
+      let score = minimax(board, 0, false);
+      board[i] = "";
+      if (score > bestScore) {
+        bestScore = score;
+        move = i;
+      }
     }
-    if(pCount === 2 && emptyIdx !== -1) return emptyIdx;
   }
-  return -1;
+  return move;
 }
 
 function botMove() {
@@ -739,9 +752,9 @@ function updateBoard() {
   });
 }
 
-function checkWin(player) {
+function checkWin(player, b = board) {
   const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-  return winPatterns.some(pattern => pattern.every(index => board[index] === player));
+  return winPatterns.some(pattern => pattern.every(index => b[index] === player));
 }
 
 function endGame(msg, playerWon) {
@@ -829,22 +842,32 @@ function updateCheckoutSavingsBanner() {
   const banner = document.getElementById('checkout-savings-banner');
   let savings = 0;
   
-  if (addonSelect.value.includes("1709")) { savings = 790; } 
-  else if (addonSelect.value.includes("2279")) { savings = 920; } 
-  else if (addonSelect.value.includes("2944")) { savings = 656; } 
-  else if (addonSelect.value.includes("3419")) { savings = 781; } 
-  else if (addonSelect.value.includes("Without SD card 1799")) { savings = 400; } 
-  else if (addonSelect.value.includes("With 8GB SD card 2199")) { savings = 500; } 
-  else if (addonSelect.value.includes("30 cm")) { savings = 501; } 
-  else if (addonSelect.value.includes("45 cm")) { savings = 601; } 
-  else { savings = 400; }
+  if (isMirrorCheckout) {
+     if (addonSelect.value.includes("30 cm")) { savings = 501; } 
+     else if (addonSelect.value.includes("45 cm")) { savings = 601; } 
+     
+     banner.innerHTML = `⚡ YOU ARE SAVING ৳${savings} TODAY ⚡<br><span style="color:#ff0055; font-size:10px;">+ ৳200 DELIVERY CHARGE (HEAVY/FRAGILE ITEM)</span>`;
+     banner.style.borderColor = "#ff0055";
+     banner.style.color = "#fff";
+     banner.style.textShadow = "none";
+  } else {
+    if (addonSelect.value.includes("1709")) { savings = 790; } 
+    else if (addonSelect.value.includes("2279")) { savings = 920; } 
+    else if (addonSelect.value.includes("Without SD card 1799")) { savings = 400; } 
+    else if (addonSelect.value.includes("With 8GB SD card 2199")) { savings = 500; } 
+    else { savings = 400; }
 
-  banner.innerText = `⚡ YOU ARE SAVING ৳${savings} TODAY + FREE SHIPPING ⚡`;
+    banner.innerHTML = `⚡ YOU ARE SAVING ৳${savings} TODAY + FREE SHIPPING ⚡`;
+    banner.style.borderColor = "#0f0";
+    banner.style.color = "#0f0";
+    banner.style.textShadow = "0 0 5px #0f0";
+  }
 }
 
 // --- SECURE CHECKOUT LOGIC FOR CAMERA GEAR ---
 function openCheckout(itemColor, isWithSD) {
   soundClick();
+  isMirrorCheckout = false;
   document.getElementById('catalog').style.opacity = "0";
   
   setTimeout(() => {
@@ -868,9 +891,9 @@ function openCheckout(itemColor, isWithSD) {
     if (gameDiscountActive) {
       addonDropdown.innerHTML = `
         <option value="Without SD card (5% OFF) 1709">Without SD card 1709 (5% OFF)</option>
-        <option value="With 8GB SD card (5% OFF) 2089">With 8GB SD card 2089 (5% OFF)</option>
+        <option value="With 8GB SD card (5% OFF) 2279">With 8GB SD card 2279 (5% OFF)</option>
       `;
-      addonDropdown.value = isWithSD ? "With 8GB SD card (5% OFF) 2089" : "Without SD card (5% OFF) 1709";
+      addonDropdown.value = isWithSD ? "With 8GB SD card (5% OFF) 2279" : "Without SD card (5% OFF) 1709";
     } else {
       addonDropdown.innerHTML = `
         <option value="Without SD card 1799">Without SD card 1799</option>
@@ -881,7 +904,7 @@ function openCheckout(itemColor, isWithSD) {
 
     document.getElementById('lbl-color').innerText = "> SELECT PRODUCT COLOR *";
     document.getElementById('lbl-addons').innerText = "> CHOOSE ADD-ONS *";
-    document.getElementById('form-brocode').value = appliedBroCode;
+    document.getElementById('form-brocode').value = gameDiscountActive ? "ARCADE5" : "";
     
     updateCheckoutSavingsBanner();
 
@@ -896,6 +919,7 @@ function openCheckout(itemColor, isWithSD) {
 // --- SECURE CHECKOUT LOGIC FOR MIRROR ---
 function openCheckoutMirror() {
   soundClick();
+  isMirrorCheckout = true;
   document.getElementById('catalog').style.opacity = "0";
   
   setTimeout(() => {
@@ -910,21 +934,21 @@ function openCheckoutMirror() {
     
     if (gameDiscountActive) {
       addonDropdown.innerHTML = `
-        <option value="30 cm (5% OFF) 2944">30 cm 2944 (5% OFF)</option>
-        <option value="45 cm (5% OFF) 3419">45 cm 3419 (5% OFF)</option>
+        <option value="30 cm (5% OFF) 2944 + 200 Del">30 cm 2944 + 200 Del (5% OFF)</option>
+        <option value="45 cm (5% OFF) 3419 + 200 Del">45 cm 3419 + 200 Del (5% OFF)</option>
       `;
-      addonDropdown.value = is30 ? "30 cm (5% OFF) 2944" : "45 cm (5% OFF) 3419";
+      addonDropdown.value = is30 ? "30 cm (5% OFF) 2944 + 200 Del" : "45 cm (5% OFF) 3419 + 200 Del";
     } else {
       addonDropdown.innerHTML = `
-        <option value="30 cm (3099)">30 cm (3099)</option>
-        <option value="45 cm (3599)">45 cm (3599)</option>
+        <option value="30 cm (3099) + 200 Delivery">30 cm (3099) + 200 Delivery</option>
+        <option value="45 cm (3599) + 200 Delivery">45 cm (3599) + 200 Delivery</option>
       `;
-      addonDropdown.value = is30 ? "30 cm (3099)" : "45 cm (3599)";
+      addonDropdown.value = is30 ? "30 cm (3099) + 200 Delivery" : "45 cm (3599) + 200 Delivery";
     }
 
     document.getElementById('lbl-color').innerText = "> SELECT COLOR (ORANGE ONLY) *";
     document.getElementById('lbl-addons').innerText = "> CHOOSE MIRROR SIZE *";
-    document.getElementById('form-brocode').value = appliedBroCode;
+    document.getElementById('form-brocode').value = gameDiscountActive ? "ARCADE5" : "";
     
     updateCheckoutSavingsBanner();
 
@@ -1087,7 +1111,7 @@ function getPriceHTML(isWithSD) {
   let basePrice = isWithSD ? 2199 : 1799;
 
   if (gameDiscountActive) {
-    let discountedPrice = isWithSD ? 2089 : 1709;
+    let discountedPrice = isWithSD ? 2279 : 1709;
     let totalSaved = oldPrice - discountedPrice;
     return '<div class="price-stack"><span class="old-price">৳' + oldPrice + '</span><span class="new-price" style="color:#0f0; text-shadow:0 0 10px #0f0;">৳' + discountedPrice + '</span></div><span class="disc-tag" style="background:#0f0; color:#000;">🎮 5% OFF APPLIED</span>';
   } else {
