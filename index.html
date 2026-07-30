@@ -2,37 +2,42 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>SILLY SOCKS | ULTIMATE ARCADE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>SILLY SOCKS | ARCADE DROP</title>
 <style>
 /* ===========================================
-  ULTIMATE IMMERSIVE SYNTHWAVE / WEBGL-STYLE 
+80s SYNTHWAVE / MEMPHIS THEME - STRICT SEQUENCE
 =========================================== */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat:ital,wght@0,400;0,600;0,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Montserrat:ital,wght@0,400;0,800;0,900;1,900&display=swap');
 :root {
-  --bg: #050508;
+  --bg: #0b0c10;
   --text: #ffffff;
-  --text-muted: #8a93a8;
-  --accent-1: #ff2a6d; /* Neon Pink */
-  --accent-2: #05d9e8; /* Cyan */
-  --accent-3: #ffc200; /* Cyber Yellow */
-  
-  --card-bg: rgba(15, 17, 25, 0.45);
-  --card-border: rgba(5, 217, 232, 0.2);
-  --grid-line: rgba(5, 217, 232, 0.25);
-  
-  --radius-lg: 24px; --radius-md: 16px; --radius-sm: 8px;
-  
-  --shadow-diffuse: 0 20px 50px rgba(0,0,0,0.7);
+  --text-muted: #aaaaaa;
+  --accent-1: #ff00ff; 
+  --accent-2: #00ffff; 
+  --accent-3: #ffff00; 
+  --card-bg: rgba(20, 10, 30, 0.85);
+  --card-border: #ff00ff;
+  --grid-line: rgba(0, 255, 255, 0.4);
+  --grid-glow: rgba(255, 0, 255, 0.3);
   --font-main: 'Montserrat', sans-serif;
   --font-retro: 'Press Start 2P', cursive;
-  --glass-blur: blur(20px);
+  --shadow-retro: 0 0 10px var(--accent-1), 0 0 20px var(--accent-2);
 }
-
+[data-theme="light"] {
+  --bg: #f4f4f4;
+  --text: #111111;
+  --text-muted: #555555;
+  --accent-1: #ff007f; 
+  --accent-2: #00e5ff; 
+  --accent-3: #ffea00; 
+  --card-bg: #ffffff;
+  --card-border: #111111;
+  --grid-line: rgba(0, 0, 0, 0.1);
+  --grid-glow: transparent;
+  --shadow-retro: 8px 8px 0px var(--card-border);
+}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; cursor: none; } /* Hide default cursor for neon trail */
-
 body {
   font-family: var(--font-main);
   background-color: var(--bg);
@@ -40,775 +45,1145 @@ body {
   overflow-x: hidden;
   height: 100vh;
   overflow-y: hidden;
+  transition: background-color 0.5s, color 0.5s;
   -webkit-tap-highlight-color: transparent;
 }
-
-/* --- CANVAS PARTICLE CURSOR --- */
-#cursor-canvas {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 9999;
-}
-
-/* --- BOOT SCREEN & CRT EFFECT --- */
-#boot-screen {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: #000; z-index: 10000; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; cursor: pointer;
-}
-.terminal-text {
-  font-family: var(--font-retro); color: #0f0; font-size: 12px;
-  text-shadow: 0 0 10px #0f0; line-height: 2; text-align: left;
-  width: 80%; max-width: 600px;
-}
-.cursor-blink { animation: blink 1s infinite; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-.crt-turn-on { animation: crtOn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-@keyframes crtOn {
-  0% { transform: scale(1, 0.005); opacity: 0; filter: brightness(10); }
-  40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(5); }
-  100% { transform: scale(1, 1); filter: brightness(1); }
-}
-
-/* --- CRT SCANLINES & IMMERSIVE FX --- */
-.scanlines {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-  background-size: 100% 4px, 3px 100%;
-  z-index: 9998; pointer-events: none; opacity: 0.7; mix-blend-mode: overlay;
-}
-.plasma-orb {
-  position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: -3;
-  /* Beat synced to 110BPM (0.545s per beat) */
-  animation: floatOrb 25s infinite alternate ease-in-out, pulseBeat 0.545s infinite alternate ease-in-out;
-  will-change: transform, opacity;
-}
-.orb-1 { width: 45vw; height: 45vw; background: var(--accent-1); top: -10%; left: -10%; }
-.orb-2 { width: 55vw; height: 55vw; background: var(--accent-2); bottom: -20%; right: -10%; animation-delay: -5s, 0s; }
-@keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(150px, 200px) scale(1.3); } }
-@keyframes pulseBeat { 0% { opacity: 0.3; filter: blur(80px); } 100% { opacity: 0.6; filter: blur(60px); } }
-
-/* --- DYNAMIC PARALLAX GRID --- */
+/* --- 80s PERSPECTIVE GRID --- */
 .synth-grid {
-  position: fixed; bottom: -25vh; left: -50vw; width: 200vw; height: 80vh;
-  background-image: linear-gradient(var(--grid-line) 2px, transparent 2px), linear-gradient(90deg, var(--grid-line) 2px, transparent 2px);
-  background-size: 70px 70px;
-  transform: perspective(1000px) rotateX(75deg);
+  position: fixed; bottom: -20vh; left: -50vw; width: 200vw; height: 70vh;
+  background-image: 
+  linear-gradient(var(--grid-line) 2px, transparent 2px),
+  linear-gradient(90deg, var(--grid-line) 2px, transparent 2px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(70deg);
   transform-origin: top; z-index: -2;
-  animation: gridScroll 3s linear infinite;
-  mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 90%);
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 90%);
-  will-change: transform, background-position;
+  animation: gridScroll 2s linear infinite;
+  box-shadow: 0 -40px 100px var(--grid-glow);
+  pointer-events: none;
 }
-@keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 0 70px; } }
+@keyframes gridScroll {
+  0% { transform: perspective(600px) rotateX(70deg) translateY(0); }
+  100% { transform: perspective(600px) rotateX(70deg) translateY(50px); }
+}
+.memphis-shapes { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
+[data-theme="light"] .memphis-shapes { opacity: 1; }
+.shape { position: absolute; border: 4px solid var(--card-border); }
+.circle { border-radius: 50%; width: 80px; height: 80px; background: var(--accent-3); top: 10%; left: 5%; animation: float 10s infinite alternate; }
+.triangle { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 80px solid var(--accent-1); border-top: none; background: transparent; top: 70%; right: 10%; animation: float 12s infinite alternate-reverse; }
+.squiggle { width: 120px; height: 15px; background: repeating-linear-gradient(45deg, var(--accent-2), var(--accent-2) 10px, transparent 10px, transparent 20px); top: 25%; right: 15%; animation: spin 15s linear infinite; }
 
-/* --- SCREENS --- */
+/* --- SCREENS CONFIGURATION --- */
 .screen-layer {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 5000; transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--bg); z-index: 5000; transition: all 0.6s cubic-bezier(0.8, -0.2, 0.2, 1.5);
 }
-#hero-screen { display: none; opacity: 0; transform: scale(1.05); }
-#tictactoe-screen, #gate, #checkout-screen, #success-screen { display: none; opacity: 0; transform: scale(0.95); }
-.visible-screen { display: flex !important; opacity: 1 !important; transform: scale(1) !important; }
+#tictactoe-screen, #gate, #checkout-screen, #success-screen { display: none; opacity: 0; transform: scale(0.8); }
+#tictactoe-screen.visible, #gate.visible, #checkout-screen.visible, #success-screen.visible { opacity: 1; transform: scale(1); }
 
-/* --- HERO TEXT GLITCH --- */
-.hero-logo { 
-  font-family: var(--font-retro); font-size: clamp(24px, 6vw, 70px); 
-  text-align: center; margin-bottom: 24px; z-index: 10; 
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
-  background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: gradientShine 4s linear infinite, extremeGlitch 4s infinite;
-  text-shadow: 0 0 40px rgba(5, 217, 232, 0.5);
-  position: relative;
-}
-@keyframes gradientShine { to { background-position: 300% center; } }
-@keyframes extremeGlitch { 
-  0%, 94%, 100% { transform: skewX(0deg); filter: drop-shadow(0 0 10px var(--accent-2)); } 
-  95% { transform: skewX(15deg) translateX(-5px); filter: drop-shadow(10px 0 0 var(--accent-1)) drop-shadow(-10px 0 0 var(--accent-2)); } 
-  96% { transform: skewX(-15deg) translateX(5px); filter: drop-shadow(-10px 0 0 var(--accent-1)) drop-shadow(10px 0 0 var(--accent-2)); } 
-  97% { transform: skewX(0deg); filter: hue-rotate(90deg); }
-}
-.hero-prompt { font-family: var(--font-retro); font-size: 11px; color: var(--accent-3); animation: softPulse 2s infinite; z-index: 10; letter-spacing: 2px; }
+/* --- SCREEN 1: HERO & ARCADE BUTTONS --- */
+#hero-screen { display: flex; opacity: 1; transform: scale(1); }
+.hero-logo { font-family: var(--font-retro); font-size: clamp(24px, 8vw, 60px); text-align: center; color: #fff; text-shadow: 0 0 10px var(--accent-1), 4px 4px 0px var(--accent-2); margin-bottom: 10px; z-index: 10; animation: pulseLogo 2s infinite alternate; padding: 0 15px; }
+@keyframes pulseLogo { 0% { transform: scale(1) skewX(0deg); text-shadow: 0 0 10px var(--accent-1), 4px 4px 0px var(--accent-2); } 100% { transform: scale(1.05) skewX(-5deg); text-shadow: 0 0 25px var(--accent-1), 6px 6px 0px var(--accent-2); } }
+.hero-prompt { font-family: var(--font-retro); font-size: clamp(10px, 3vw, 12px); color: var(--accent-3); animation: blink 1s steps(2, start) infinite; z-index: 10; text-align: center; padding: 0 10px; line-height: 1.5; margin-bottom: 25px;}
+@keyframes blink { to { visibility: hidden; } }
 
-/* MAGNETIC + SCRAMBLE BUTTONS */
-.magnetic-btn {
-  font-family: var(--font-retro); font-size: 13px; 
-  background: rgba(255, 255, 255, 0.03); color: #fff; 
-  border: 1px solid var(--accent-2); padding: 22px 45px; 
-  border-radius: 50px; cursor: pointer; text-transform: uppercase; 
-  backdrop-filter: var(--glass-blur); box-shadow: 0 0 25px rgba(5, 217, 232, 0.15);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative; overflow: hidden;
+.arcade-blocks { z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; padding: 0 20px; }
+.arcade-btn {
+  width: 100%; max-width: 320px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid var(--accent-1);
+  padding: 20px 15px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 6px 6px 0 var(--accent-1);
 }
-.magnetic-btn::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: var(--accent-2); border-radius: 50%; transition: width 0.5s, height 0.5s; z-index: -1; }
-.magnetic-btn:hover::before { width: 350px; height: 350px; }
-.magnetic-btn:hover { color: #000; box-shadow: 0 0 50px rgba(5, 217, 232, 0.7); }
+.arcade-btn:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent-2); border-color: var(--accent-2); }
+.arcade-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+.arcade-btn.shop { border-color: #0f0; box-shadow: 6px 6px 0 #0f0; }
+.arcade-btn.shop:hover { box-shadow: 10px 10px 0 #fff; border-color: #fff; }
+.arcade-btn .btn-title { font-family: var(--font-retro); font-size: 14px; color: var(--accent-3); text-shadow: 2px 2px 0 #000; }
+.arcade-btn.shop .btn-title { color: #0f0; }
+.arcade-btn .btn-sub { font-family: var(--font-main); font-size: 11px; font-weight: 900; color: #fff; letter-spacing: 1px; text-align: center;}
 
-/* --- PREMIUM BOX & FORMS --- */
-.retro-box { 
-  width: 90%; max-width: 500px; text-align: center; padding: 3.5rem 2.5rem; 
-  background: var(--card-bg); border: 1px solid var(--card-border); 
-  box-shadow: var(--shadow-diffuse), inset 0 0 40px rgba(5,217,232,0.05); 
-  position: relative; margin: 0 auto; 
-  backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius-lg);
-}
-.retro-input, .retro-select { 
-  width: 100%; padding: 16px; background: rgba(0,0,0,0.4); 
-  border: 1px solid rgba(255,255,255,0.1); color: var(--text); 
-  font-family: var(--font-main); font-weight: 700; font-size: 14px; outline: none; 
-  border-radius: var(--radius-md); transition: all 0.3s;
-}
-.retro-input:focus, .retro-select:focus { border-color: var(--accent-1); background: rgba(0,0,0,0.7); box-shadow: 0 0 25px rgba(255, 42, 109, 0.3); }
-.retro-btn { 
-  width: 100%; padding: 18px; background: rgba(5, 217, 232, 0.1); color: var(--text); 
-  border: 1px solid var(--accent-2); font-family: var(--font-retro); font-size: 11px; 
-  cursor: pointer; transition: all 0.3s; border-radius: var(--radius-md);
-}
-.retro-btn:hover { background: var(--accent-2); color: #000; box-shadow: 0 0 30px var(--accent-2); transform: translateY(-4px); }
+#sock-rain { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 1;}
+.falling-sock { position: absolute; top: -10%; font-size: 35px; animation: dropSock linear infinite; filter: drop-shadow(0 0 10px var(--accent-1)); }
+@keyframes dropSock { 0% { transform: translateY(-10vh) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
 
-/* --- TICKER --- */
-.ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.6); color: var(--accent-3); padding: 16px 0; font-family: var(--font-retro); font-size: 11px; white-space: nowrap; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; will-change: transform; }
-.ticker span { margin-right: 50px; text-shadow: 0 0 15px var(--accent-3); }
+/* --- REUSABLE RETRO BOX --- */
+.retro-box { width: 90%; max-width: 500px; text-align: center; padding: 2.5rem 1.5rem; background: var(--card-bg); border: 4px solid var(--card-border); box-shadow: var(--shadow-retro); position: relative; margin: 0 auto; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch;}
+.retro-box::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border: 1px dashed var(--accent-2); pointer-events: none; }
+.retro-btn { padding: 12px 15px; background: var(--accent-1); color: #fff; border: 3px solid var(--card-border); font-family: var(--font-retro); font-size: 10px; cursor: pointer; transition: all 0.2s; box-shadow: 4px 4px 0 var(--accent-2); text-transform: uppercase; margin: 5px 0; width: 100%; display: block; }
+.retro-btn:hover { background: var(--accent-2); color: #000; box-shadow: 4px 4px 0 var(--accent-1); transform: translate(-2px, -2px); }
+.retro-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 transparent; }
+
+/* --- SCREEN 2: TIC-TAC-TOE --- */
+.ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; max-width: 280px; margin: 20px auto; aspect-ratio: 1/1; background: var(--card-border); border: 4px solid var(--card-border); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+.ttt-cell { background: var(--bg); display: flex; align-items: center; justify-content: center; font-family: var(--font-retro); font-size: clamp(30px, 8vw, 40px); cursor: pointer; transition: background 0.2s; }
+.ttt-cell:hover { background: rgba(255,255,255,0.1); }
+.ttt-cell.x { color: var(--accent-1); text-shadow: 0 0 15px var(--accent-1); }
+.ttt-cell.o { color: var(--accent-2); text-shadow: 0 0 15px var(--accent-2); }
+#ttt-status { font-family: var(--font-retro); font-size: 10px; color: var(--accent-3); margin-top: 10px; line-height: 1.6; animation: pulseLogo 1.5s infinite alternate;}
+.btn-group { display: flex; flex-direction: column; gap: 5px; margin-top: 15px; }
+
+/* --- SCREEN 3: GATE / HACKING --- */
+.lock-icon { font-size: 40px; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--accent-1)); transition: all 0.5s ease; }
+.gate-title { font-family: var(--font-retro); font-size: 16px; line-height: 1.5; margin-bottom: 15px; color: var(--accent-1); text-shadow: 2px 2px 0 #000; transition: color 0.5s ease; }
+.gate-sub { font-size: 11px; font-weight: 800; font-family: var(--font-retro); color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.8;}
+.input-row { display: flex; flex-direction: row; gap: 10px; margin-bottom: 15px; justify-content: center; align-items: center;}
+.retro-input, .retro-select { flex: 1; min-width: 0; padding: 12px; background: #000; border: 3px solid var(--card-border); color: #0f0; font-family: var(--font-retro); font-size: 10px; outline: none; box-shadow: inset 0 0 10px rgba(0,255,0,0.2); text-transform: uppercase; width: 100%;}
+.retro-input:focus, .retro-select:focus { border-color: var(--accent-2); box-shadow: inset 0 0 15px var(--accent-2); }
+#errMsg { font-family: var(--font-retro); font-size: 10px; color: var(--accent-1); min-height: 20px; display: none; margin-top: 10px; }
+.hacked-text { color: #0f0 !important; text-shadow: 0 0 15px #0f0 !important; }
+.hacked-icon { filter: drop-shadow(0 0 15px #0f0) !important; transform: scale(1.2); }
+
+/* --- SCREEN 4 & 6: CHECKOUT & SUCCESS UI --- */
+#checkout-screen { overflow-y: auto; padding: 20px 0; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
+.checkout-form { display: flex; flex-direction: column; gap: 12px; text-align: left; margin-top: 5px;}
+.checkout-form label { font-size: 9px; font-family: var(--font-retro); color: var(--accent-2); margin-top: 6px;}
+
+.checkout-hype-banner { background: rgba(0, 255, 0, 0.15); border: 2px dashed #0f0; color: #0f0; padding: 12px; text-align: center; font-size: 11px; font-family: var(--font-retro); line-height: 1.5; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,255,0,0.2); text-shadow: 0 0 5px #0f0;}
+.tc-box { height: 90px; overflow-y: auto; background: #000; border: 2px dashed var(--accent-1); padding: 10px; font-size: 9px; color: #ccc; line-height: 1.6; margin-bottom: 10px; -webkit-overflow-scrolling: touch;}
+.tc-box strong { color: var(--accent-1); font-weight: 900;}
+.checkbox-row { display: flex; align-items: flex-start; gap: 10px; font-size: 10px; font-weight: 800; line-height: 1.4; color: #fff;}
+.checkbox-row input { appearance: none; width: 18px; height: 18px; border: 2px solid var(--card-border); background: var(--bg); cursor: pointer; min-width: 18px; margin-top: 2px;}
+.checkbox-row input:checked { background: var(--accent-3); border-color: var(--accent-3); box-shadow: inset 0 0 0 2px #000; }
+.radio-group { display: flex; gap: 15px; flex-wrap: wrap; background: #000; padding: 10px; border: 2px solid var(--card-border); }
+.radio-group label { display: flex; align-items: center; gap: 8px; color: #fff; font-family: var(--font-main); font-size: 11px; margin-top: 0; font-weight: 800; cursor: pointer;}
+
+/* bKash Alert Box - Enhanced Contrast for Day Mode */
+.bkash-info-box { background: #000; border: 2px dashed var(--accent-1); padding: 12px; border-radius: 4px; margin-top: 5px; display: flex; flex-direction: column; gap: 8px; }
+.bkash-number { font-family: var(--font-retro); font-size: 11px; color: var(--accent-3); text-shadow: 0 0 8px var(--accent-3); letter-spacing: 1px; }
+
+.trust-badges { display: flex; justify-content: center; gap: 10px; font-size: 8px; font-family: var(--font-retro); color: var(--text-muted); margin-top: 10px; text-align: center; flex-wrap: wrap;}
+.trust-badges span { background: #000; padding: 6px; border: 1px solid #333; }
+
+.stat-row { font-family: var(--font-retro); font-size: 10px; margin-bottom: 15px; color: var(--accent-2); line-height: 1.5; text-align: left; }
+.stat-val { color: #0f0; text-shadow: 0 0 8px #0f0; }
+.score-tally { font-family: var(--font-retro); font-size: 24px; color: var(--accent-3); margin: 30px 0; text-shadow: 0 0 15px var(--accent-3); letter-spacing: 2px; }
+.blink-text { animation: blink 1s steps(2, start) infinite; }
+
+/* --- SCREEN 5: CATALOG UI --- */
+#catalog { display: none; min-height: 100vh; opacity: 0; transform: translateY(100px); transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); padding-bottom: 80px; z-index: 10; position: relative;}
+#catalog.visible { opacity: 1; transform: translateY(0); }
+.cat-header { background: var(--card-bg); border-bottom: 4px solid var(--card-border); padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-retro); }
+.header-logo { font-family: var(--font-retro); font-size: clamp(16px, 4vw, 20px); color: var(--accent-2); text-shadow: 2px 2px 0 var(--accent-1); }
+.welcome-pill { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; border: 2px solid var(--accent-3); padding: 8px 12px; font-family: var(--font-retro); font-size: 10px; color: var(--accent-3); background: #000; }
+.theme-toggle-btn { background: var(--bg); color: var(--text); font-weight: 900; font-family: var(--font-retro); font-size: 8px; text-transform: uppercase; cursor: pointer; border: 2px solid var(--accent-3); padding: 6px 10px; box-shadow: 2px 2px 0 var(--accent-3); transition: all 0.2s; margin: 0; }
+.theme-toggle-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+.theme-toggle-btn:hover { background: var(--accent-3); color: #000; }
+
+.ticker-wrap { width: 100%; overflow: hidden; background: #000; color: var(--accent-3); padding: 8px 0; font-family: var(--font-retro); font-size: 10px; border-bottom: 2px dashed var(--accent-3); white-space: nowrap; }
+.ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; }
+.ticker span { margin-right: 30px; }
 @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
-.disc-bar { background: linear-gradient(90deg, #ff0055, var(--accent-1), #ff0055); background-size: 200% auto; animation: gradientShine 3s linear infinite; padding: 14px; text-align: center; font-size: 13px; font-weight: 900; font-family: var(--font-main); color: #fff; letter-spacing: 3px; }
 
-/* --- 3D TILT CARDS WITH HOLOGRAPHIC GLARE & ABERRATION --- */
-#catalog { display: none; min-height: 100vh; opacity: 0; padding-bottom: 80px; z-index: 10; position: relative;}
-.cat-body { max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem 0; }
+.disc-bar { background: var(--accent-1); padding: 10px 1rem; text-align: center; font-size: 10px; font-family: var(--font-retro); color: #fff; line-height: 1.6; border-bottom: 4px solid #000; transition: background 0.3s;}
 
-.cam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 50px; perspective: 1800px; }
-.cam-card { 
-  background: var(--card-bg); border: 1px solid var(--card-border); 
-  border-radius: var(--radius-lg); transition: transform 0.1s, box-shadow 0.4s, border-color 0.4s; 
-  box-shadow: var(--shadow-diffuse); display: flex; flex-direction: column;
-  backdrop-filter: var(--glass-blur); overflow: hidden;
-  transform-style: preserve-3d; position: relative;
+.cat-body { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem 0; }
+.section-label { font-family: var(--font-retro); font-size: 14px; color: var(--text); margin-bottom: 2rem; text-shadow: 2px 2px 0 var(--accent-1); line-height: 1.4; }
+
+/* Explainer Box (Hardcoded white text for day mode visibility) */
+.explainer-box { background: var(--card-bg); border: 3px solid var(--card-border); padding: 15px; margin-bottom: 25px; box-shadow: 5px 5px 0 var(--accent-2); }
+.explainer-title { font-family: var(--font-retro); font-size: 12px; color: var(--accent-3); margin-bottom: 14px; }
+.explainer-list { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 768px) { .explainer-list { grid-template-columns: repeat(2, 1fr); } }
+.explainer-item { font-size: 12px; font-weight: 800; color: #fff; background: #000; border: 2px dashed var(--accent-2); padding: 12px; line-height: 1.5; }
+
+/* --- HIGH-CONVERTING PRODUCT CARDS --- */
+.cam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+.cam-card { background: var(--card-bg); border: 4px solid var(--card-border); position: relative; transition: all 0.2s ease; box-shadow: 6px 6px 0 var(--accent-1); display: flex; flex-direction: column;}
+@media (hover: hover) { .cam-card:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0 var(--accent-2); } .cam-card:hover .cam-img { transform: scale(1.08); filter: contrast(110%); } }
+
+.img-wrapper { width: 100%; height: 220px; border-bottom: 4px solid var(--card-border); background: #ffffff; overflow: hidden; position: relative;}
+.cam-img { width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: transform 0.5s; }
+
+.live-watch { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: #fff; font-family: var(--font-main); font-weight: 800; font-size: 9px; padding: 6px 10px; border: 1px solid var(--accent-2); display: flex; align-items: center; gap: 5px;}
+.dot { width: 6px; height: 6px; background: red; border-radius: 50%; animation: blink 1s infinite; }
+
+.cam-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+.cam-name { font-family: var(--font-retro); font-size: 13px; margin-bottom: 8px; color: var(--accent-2); text-shadow: 1px 1px 0 #000; line-height: 1.4;}
+.cam-vibe { font-size: 12px; font-weight: 900; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase;}
+
+.hype-meter-container { background: #000; border: 1px solid #333; height: 8px; width: 100%; margin-bottom: 5px; position: relative; }
+.hype-meter-fill { background: var(--accent-1); height: 100%; width: 85%; }
+.hype-text { font-family: var(--font-main); font-size: 9px; font-weight: 800; color: var(--accent-1); text-align: right; margin-bottom: 15px; }
+
+.cam-perks { margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; background: #000; padding: 12px; border: 2px dashed var(--accent-1); color: #fff;}
+.perk { font-size: 11px; font-weight: 800; font-family: var(--font-main); letter-spacing: 1px;}
+.perk-highlight { color: var(--accent-3); }
+
+.variant-toggle { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+.toggle-opt { font-size: 12px; font-weight: 900; display: flex; align-items: center; gap: 10px; cursor: pointer; text-transform: uppercase; }
+.toggle-opt input { appearance: none; width: 14px; height: 14px; border: 2px solid var(--card-border); background: var(--bg); cursor: pointer; position: relative; border-radius: 0; min-width: 14px; }
+.toggle-opt input:checked { background: var(--accent-2); border-color: var(--accent-2); box-shadow: 2px 2px 0 var(--accent-1); }
+
+.price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; padding-top: 15px; border-top: 2px solid var(--card-border); margin-bottom: 15px;}
+.price-stack { display: flex; flex-direction: column; gap: 3px; }
+.old-price { font-size: 12px; color: var(--text-muted); text-decoration: line-through; font-weight: 900; }
+.new-price { font-family: var(--font-retro); font-size: 16px; color: var(--accent-3); text-shadow: 1px 1px 0 #000;}
+.disc-tag { font-family: var(--font-retro); font-size: 9px; background: #0f0; padding: 6px 8px; color: #000; border: 2px solid #000; display: inline-block;}
+
+.buy-btn { width: 100%; padding: 15px; background: var(--accent-1); color: #fff; border: 3px solid var(--card-border); font-family: var(--font-retro); font-size: 12px; cursor: pointer; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; }
+.buy-btn:hover { background: var(--accent-2); color: #000; transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--card-border); }
+.buy-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+
+/* Tabs */
+.page-nav { display: flex; gap: 10px; padding: 0 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap;}
+.page-tab { background: var(--bg); border: 3px solid var(--card-border); padding: 10px 15px; font-family: var(--font-retro); font-size: 9px; color: var(--text); cursor: pointer; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; line-height: 1.4;}
+.page-tab.active { background: var(--accent-1); color: #fff; transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--card-border); }
+.footer { text-align: center; padding: 3rem 1.5rem; font-family: var(--font-retro); font-size: 9px; color: var(--text-muted); border-top: 2px dashed var(--card-border); margin-top: 3rem; line-height: 2;}
+
+/* --- IG & WA FLOATING BUTTONS --- */
+.floating-actions { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 9999; }
+.float-btn { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 3px solid var(--card-border); cursor: pointer; box-shadow: 4px 4px 0 var(--card-border); transition: all 0.2s; border-radius: 50%; }
+.float-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+.float-btn svg { width: 26px; height: 26px; fill: #fff; }
+.ig-btn { background: var(--accent-1); }
+.wa-btn { background: #25D366; border-color: #000; box-shadow: 4px 4px 0 #000; }
+
+@media(max-width: 480px) {
+  .input-row { flex-direction: column; align-items: stretch; }
+  .retro-btn { width: 100% !important; padding: 15px; margin: 5px 0;}
+  .cat-header { flex-direction: column; align-items: center; text-align: center; }
+  .welcome-pill { justify-content: center; text-align: center; }
+  .theme-toggle-btn { margin-left: 0; margin-top: 5px; }
+  .retro-box { padding: 1.5rem 1rem; width: 95%; }
+  .cam-grid { grid-template-columns: 1fr; }
 }
-
-/* Holographic Foil Glare */
-.glare {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(125deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 40%, rgba(255,42,109,0.3) 45%, rgba(5,217,232,0.3) 50%, rgba(255,255,255,0.4) 55%, rgba(255,255,255,0) 70%);
-  background-size: 300% 300%;
-  opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 10; mix-blend-mode: color-dodge;
-}
-.cam-card:hover { box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(5, 217, 232, 0.3); z-index: 2; border-color: var(--accent-2); }
-.cam-card:hover .glare { opacity: 1; }
-
-.img-wrapper { width: 100%; height: 300px; background: rgba(0,0,0,0.4); position: relative; border-bottom: 1px solid var(--card-border); transform: translateZ(60px); display: flex; align-items: center; justify-content: center; overflow:hidden;}
-
-.cam-img { width: 85%; height: 85%; object-fit: contain; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));}
-
-/* Chromatic Aberration Hover */
-.cam-card:hover .cam-img { 
-  transform: scale(1.15) translateY(-10px) rotate(3deg); 
-  filter: drop-shadow(0 30px 40px rgba(0,0,0,0.8)) 
-          drop-shadow(6px 0 0 rgba(255, 42, 109, 0.8)) 
-          drop-shadow(-6px 0 0 rgba(5, 217, 232, 0.8));
-}
-
-.cam-info { padding: 35px; flex-grow: 1; display: flex; flex-direction: column; transform: translateZ(40px); }
-.cam-name { font-family: var(--font-main); font-weight: 900; font-size: 24px; margin-bottom: 8px; letter-spacing: 0.5px;}
-.cam-vibe { font-size: 12px; font-weight: 800; color: var(--accent-2); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px;}
-
-/* Tic Tac Toe Grid */
-.ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 280px; margin: 30px auto; aspect-ratio: 1/1; }
-.ttt-cell { background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-main); font-weight: 900; font-size: 45px; cursor: pointer; transition: all 0.3s; }
-.ttt-cell:hover { background: rgba(5, 217, 232, 0.25); border-color: var(--accent-2); box-shadow: inset 0 0 30px rgba(5,217,232,0.4); transform: translateZ(10px); }
-.ttt-cell.x { color: var(--accent-1); text-shadow: 0 0 25px var(--accent-1); }
-.ttt-cell.o { color: var(--accent-2); text-shadow: 0 0 25px var(--accent-2); }
-
-/* --- HEADER & FLOATING ACTIONS --- */
-.cat-header { 
-  background: rgba(8, 9, 13, 0.85); backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid rgba(5, 217, 232, 0.3); padding: 1.8rem 2.5rem; 
-  display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
-}
-.floating-actions { position: fixed; bottom: 40px; right: 40px; display: flex; flex-direction: column; gap: 20px; z-index: 9997; }
-.float-btn { width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border-radius: 50%; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.float-btn:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 20px 45px rgba(0,0,0,0.8); }
-.ig-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-.wa-btn { background: #25D366; }
-.float-btn svg { width: 28px; height: 28px; fill: #fff; }
 </style>
 </head>
 <body>
 
-<!-- CANVAS NEON CURSOR TRAIL -->
-<canvas id="cursor-canvas"></canvas>
-
-<!-- BOOT SEQUENCE (TERMINAL) -->
-<div id="boot-screen" onclick="initArcade()">
-  <div class="terminal-text" id="terminal-text"></div>
+<!-- Light Mode Memphis Shapes -->
+<div class="memphis-shapes">
+  <div class="shape circle"></div>
+  <div class="shape triangle"></div>
+  <div class="shape squiggle"></div>
 </div>
 
-<!-- IMMERSIVE BACKGROUND PARALLAX ELEMENTS -->
-<div class="scanlines"></div>
-<div class="plasma-orb orb-1" id="orb1"></div>
-<div class="plasma-orb orb-2" id="orb2"></div>
-<div class="synth-grid" id="grid"></div>
+<!-- 80s Perspective Grid -->
+<div class="synth-grid"></div>
 
-<!-- SOUND CONTROL -->
-<button class="hero-sound-toggle" id="soundToggle" onclick="toggleSound(event)" style="display:none; position:fixed; top:20px; right:20px; z-index:10000; font-family:var(--font-retro); font-size:9px; background:rgba(0,0,0,0.6); color:#fff; border:1px solid var(--accent-2); padding:12px; border-radius:30px; cursor:pointer; backdrop-filter:blur(10px);">🔊 AUDIO: ON</button>
-
-<!-- SCREEN 1: HERO SECTION -->
+<!-- SCREEN 1: HERO SECTION & ARCADE BLOCKS -->
 <div id="hero-screen" class="screen-layer">
   <div id="sock-rain"></div>
   <h1 class="hero-logo">SILLY SOCKS</h1>
   <p class="hero-prompt">>> THE NOSTALGIA VAULT IS OPEN <<</p>
-  <div style="margin-top: 60px; display: flex; flex-direction: column; gap: 25px; align-items: center;">
-    <button class="magnetic-btn scramble-text" data-text="ENTER THE ARCADE" onclick="event.stopPropagation(); leaveHero('catalog');">ENTER THE ARCADE</button>
-    <button class="scramble-text" data-text="Play mini-game for 10% off" style="background:transparent; border:none; color:var(--text-muted); font-family:var(--font-main); font-weight:800; font-size:13px; cursor:pointer; letter-spacing:1px;" onclick="event.stopPropagation(); leaveHero('game');">Play mini-game for 10% off</button>
+  
+  <div class="arcade-blocks">
+    <button class="arcade-btn shop" onclick="event.stopPropagation(); leaveHero('catalog');">
+      <span class="btn-title">🛒 QUICK BUY</span>
+      <span class="btn-sub">ENTER THE SHOP DIRECTLY</span>
+    </button>
+    <button class="arcade-btn" onclick="event.stopPropagation(); leaveHero('game');">
+      <span class="btn-title">🎮 BOSS FIGHT</span>
+      <span class="btn-sub">BEAT BOT FOR 5% OFF CODE</span>
+    </button>
   </div>
 </div>
 
-<!-- SCREEN 2: TIC-TAC-TOE -->
+<!-- SCREEN 2: TIC-TAC-TOE BATTLE SECTION -->
 <div id="tictactoe-screen" class="screen-layer">
   <div class="retro-box">
-    <div style="font-family: var(--font-retro); font-size: 16px; color: var(--accent-1); margin-bottom: 15px; text-shadow:0 0 15px var(--accent-1);">BEAT THE BOT</div>
-    <p id="ttt-status" style="font-family: var(--font-retro); font-size: 11px; color: var(--accent-3);">PLAYER 1 IS 'X'. YOUR TURN!</p>
+    <div class="gate-title" style="margin-bottom: 20px;">BEAT THE IMPOSSIBLE BOT FOR 5% OFF</div>
+    <p class="gate-sub" id="ttt-status">PLAYER 1 IS 'X'. YOUR TURN!</p>
     
     <div class="ttt-board" id="ttt-board-container">
-      <div class="ttt-cell" onclick="makeMove(0)"></div><div class="ttt-cell" onclick="makeMove(1)"></div><div class="ttt-cell" onclick="makeMove(2)"></div>
-      <div class="ttt-cell" onclick="makeMove(3)"></div><div class="ttt-cell" onclick="makeMove(4)"></div><div class="ttt-cell" onclick="makeMove(5)"></div>
-      <div class="ttt-cell" onclick="makeMove(6)"></div><div class="ttt-cell" onclick="makeMove(7)"></div><div class="ttt-cell" onclick="makeMove(8)"></div>
+      <div class="ttt-cell" onclick="makeMove(0)"></div>
+      <div class="ttt-cell" onclick="makeMove(1)"></div>
+      <div class="ttt-cell" onclick="makeMove(2)"></div>
+      <div class="ttt-cell" onclick="makeMove(3)"></div>
+      <div class="ttt-cell" onclick="makeMove(4)"></div>
+      <div class="ttt-cell" onclick="makeMove(5)"></div>
+      <div class="ttt-cell" onclick="makeMove(6)"></div>
+      <div class="ttt-cell" onclick="makeMove(7)"></div>
+      <div class="ttt-cell" onclick="makeMove(8)"></div>
     </div>
 
-    <div style="margin-top: 35px; display:flex; flex-direction:column; gap:15px;">
-      <button class="retro-btn scramble-text" data-text="TRY AGAIN" id="resetTttBtn" style="display:none;" onclick="resetBoard()">TRY AGAIN</button>
-      <button class="retro-btn scramble-text" data-text="I HAVE A CODE" onclick="showGate(false)">I HAVE A CODE</button>
-      <button class="retro-btn scramble-text" data-text="SKIP TO CATALOG" onclick="skipToCatalog()" style="background:transparent; border:1px solid rgba(255,255,255,0.2);">SKIP TO CATALOG</button>
+    <div class="btn-group">
+      <button class="retro-btn" id="resetTttBtn" style="display:none;" onclick="resetBoard()">TRY AGAIN (IF YOU DARE)</button>
+      <button class="retro-btn" id="skipToCatBtn" onclick="skipToCatalog()" style="background:#333; border-color:#555;">SKIP TO SHOP (GIVE UP)</button>
     </div>
   </div>
 </div>
 
-<!-- SCREEN 3: REFERRAL GATE -->
+<!-- SCREEN 3: REFERRAL GATE / HACKING -->
 <div id="gate" class="screen-layer">
   <div class="retro-box">
-    <div style="font-size: 50px; margin-bottom: 25px; filter:drop-shadow(0 0 15px rgba(255,255,255,0.5));">🔒</div>
-    <div id="gate-title" style="font-family: var(--font-retro); font-size: 18px; color: var(--accent-1); margin-bottom: 15px; text-shadow:0 0 15px var(--accent-1);">SYSTEM LOCKED</div>
-    <p id="gate-sub" style="font-family: var(--font-main); font-weight:800; font-size: 13px; color: var(--text-muted); margin-bottom: 35px; letter-spacing:1px;">ENTER PLAYER 1 REFERRAL CODE</p>
+    <div class="lock-icon" id="gate-icon">🔒</div>
+    <div class="gate-title" id="gate-title">SYSTEM LOCKED</div>
+    <p class="gate-sub" id="gate-sub" style="margin-bottom:1.5rem;">ENTER PLAYER 1 REFERRAL CODE</p>
     
-    <div style="display: flex; gap: 15px;" id="gate-input-area">
-      <input id="refInput" class="retro-input" type="text" placeholder="ENTER CODE" />
-      <button class="retro-btn scramble-text" data-text="START" onclick="checkCode()" style="margin:0; width:auto; padding: 16px 35px; background: var(--accent-2); color:#000; font-weight:900;">START</button>
+    <div class="input-row" id="gate-input-area">
+      <input id="refInput" class="retro-input" type="text" placeholder="CODE..." autocomplete="off" />
+      <button class="retro-btn" id="enterBtn" onclick="checkCode()" style="margin:0; width:100px;">START</button>
     </div>
 
-    <div style="display: none; gap: 15px;" id="lb-input-area">
-      <input id="lbInput" class="retro-input" type="text" placeholder="YOUR NAME (MAX 10)" maxlength="10" />
-      <button class="retro-btn scramble-text" data-text="SAVE" onclick="saveInitialsAndEnter()" style="margin:0; width:auto; padding: 16px 35px; background:var(--accent-2); color:#000;">SAVE</button>
+    <div class="input-row" id="lb-input-area" style="display:none;">
+      <input id="lbInput" class="retro-input" type="text" placeholder="INITIALS..." maxlength="10" autocomplete="off" />
+      <button class="retro-btn" onclick="saveInitialsAndEnter()" style="margin:0; width:100px;">SAVE</button>
     </div>
     
-    <div id="errMsg" style="font-family: var(--font-retro); font-size: 10px; color: var(--accent-1); display: none; margin-top: 20px; animation:blink 0.5s infinite;">ERROR: PLAYER NOT FOUND</div>
+    <div id="errMsg">ERROR: PLAYER NOT FOUND</div>
   </div>
 </div>
 
 <!-- SCREEN 4: SECURE CHECKOUT -->
 <div id="checkout-screen" class="screen-layer">
   <div class="retro-box" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
-    <div id="checkout-savings-banner" style="background: linear-gradient(90deg, rgba(5, 217, 232, 0.2), transparent); border-left: 5px solid var(--accent-2); color: var(--accent-2); padding: 18px; font-family: var(--font-main); font-weight: 900; font-size: 14px; text-align:left; border-radius:0 12px 12px 0; margin-bottom:25px; box-shadow:0 10px 20px rgba(0,0,0,0.3);">
-      ✨ SAVING ৳XXX + FREE SHIPPING
-    </div>
     
-    <form id="orderForm" style="display: flex; flex-direction: column; gap: 20px; text-align: left;">
-      <div>
-        <label style="font-family:var(--font-retro); font-size:9px; color:var(--accent-2); margin-bottom:10px; display:block;">> FULL NAME *</label>
-        <input type="text" name="Full Name" class="retro-input" required placeholder="John Doe" />
-      </div>
-      <div>
-        <label style="font-family:var(--font-retro); font-size:9px; color:var(--accent-2); margin-bottom:10px; display:block;">> PHONE NUMBER *</label>
-        <input type="tel" name="Phone Number" class="retro-input" required placeholder="+8801XXXXXXXXX" />
-      </div>
-      <div>
-        <label style="font-family:var(--font-retro); font-size:9px; color:var(--accent-2); margin-bottom:10px; display:block;">> ADDRESS *</label>
-        <textarea name="Delivery Address" class="retro-input" required placeholder="House, Road, Area, Dhaka..." rows="2"></textarea>
-      </div>
+    <div id="checkout-savings-banner" class="checkout-hype-banner">
+      ⚡ YOU ARE SAVING ৳XXX TODAY + FREE SHIPPING ⚡
+    </div>
+
+    <div class="gate-title" style="color: var(--accent-3);">SECURE CHECKOUT</div>
+    
+    <form id="orderForm" class="checkout-form">
+      <label>> FULL NAME *</label>
+      <input type="text" name="Full Name" class="retro-input" required placeholder="JOHN DOE" />
       
+      <label>> PHONE NUMBER *</label>
+      <input type="tel" name="Phone Number" class="retro-input" required placeholder="+8801XXXXXXXXX" />
+      
+      <label>> DELIVERY ADDRESS *</label>
+      <textarea name="Delivery Address" class="retro-input" required placeholder="HOUSE, ROAD, DHAKA..." rows="3" style="resize:none; font-family: var(--font-main);"></textarea>
+      
+      <label id="lbl-color">> SELECT PRODUCT COLOR *</label>
       <select name="Product Color" id="form-color" class="retro-select" required></select>
+
+      <label id="lbl-addons">> CHOOSE ADD-ONS *</label>
       <select name="Add-ons" id="form-addons" class="retro-select" required onchange="updateCheckoutSavingsBanner()"></select>
 
-      <input type="text" name="BRO CODE" id="form-brocode" class="retro-input" placeholder="BRO CODE (OPTIONAL)" />
-      
+      <label>> DISCOUNT APPLIED (IF WON)</label>
+      <input type="text" name="BRO CODE" id="form-brocode" class="retro-input" placeholder="LOCKED" readonly />
+
+      <label>> QUANTITY *</label>
       <select name="Quantity" class="retro-select" required>
-        <option value="1">QTY: 1</option><option value="2">QTY: 2</option><option value="3">QTY: 3</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
       </select>
 
-      <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.1); display:flex; flex-direction:column; gap:15px; box-shadow:inset 0 0 20px rgba(0,0,0,0.5);">
-        <label style="color:var(--text); font-family:var(--font-main); font-weight:800; display:flex; align-items:center; gap:12px; cursor:pointer;">
-          <input type="radio" name="Payment Method" value="Cash on Delivery (COD)" required onclick="toggleBkash(false)" checked style="width:20px; height:20px; accent-color:var(--accent-2);"> Cash on Delivery
-        </label>
-        <label style="color:var(--text); font-family:var(--font-main); font-weight:800; display:flex; align-items:center; gap:12px; cursor:pointer;">
-          <input type="radio" name="Payment Method" value="Bkash" required onclick="toggleBkash(true)" style="width:20px; height:20px; accent-color:var(--accent-2);"> Bkash (pay now)
-        </label>
+      <label>> PREFERRED PAYMENT METHOD *</label>
+      <div class="radio-group">
+        <label><input type="radio" name="Payment Method" value="Cash on Delivery (COD)" required onclick="toggleBkash(false)" checked> Cash on Delivery</label>
+        <label><input type="radio" name="Payment Method" value="Bkash" required onclick="toggleBkash(true)"> Bkash</label>
       </div>
 
-      <div id="bkash-field" style="display:none; background: rgba(255, 42, 109, 0.15); border: 1px solid rgba(255, 42, 109, 0.4); padding: 20px; border-radius: var(--radius-md); flex-direction: column; gap: 15px;">
-        <div style="font-family: var(--font-main); font-weight: 900; font-size: 15px; color: var(--accent-1); letter-spacing:1px;">SEND MONEY: 01961515240</div>
-        <input type="text" name="Transaction ID" id="trx-input" class="retro-input" placeholder="TRX ID *" />
+      <div id="bkash-field" class="bkash-info-box" style="display:none;">
+        <div class="bkash-number">> SEND MONEY (PERSONAL): 01961515240</div>
+        <label style="margin-top: 4px; color: #fff;">> BKASH TRANSACTION ID *</label>
+        <input type="text" name="Transaction ID" id="trx-input" class="retro-input" placeholder="ENTER TRX ID..." />
       </div>
 
-      <button type="submit" id="submitOrderBtn" class="retro-btn scramble-text" data-text="CONFIRM ORDER" style="background: var(--accent-1); border-color: var(--accent-1); color: #fff; margin-top: 15px; font-weight: 900; font-size:13px; padding:20px; box-shadow:0 10px 30px rgba(255,42,109,0.4);">CONFIRM ORDER</button>
-      <button type="button" class="retro-btn scramble-text" data-text="CANCEL" onclick="cancelCheckout()" style="background: transparent; border-color: rgba(255,255,255,0.2);">CANCEL</button>
+      <label>> LEGAL AGREEMENT</label>
+      <div class="tc-box">
+        <strong>1. ORDER MODIFICATION:</strong> We reserve the right to cancel, modify, change the order value, or delay shipments at our sole discretion.<br><br>
+        <strong>2. CASH ON DELIVERY (COD):</strong> All orders are strictly COD. We reserve the right to take legal action if a customer fails or refuses to receive their order upon delivery attempt.<br><br>
+        <strong>3. DAMAGES & LIABILITY:</strong> The customer is fully responsible for any damage occurring after successful delivery.<br><br>
+        <strong>4. STRICT 3-DAY WARRANTY:</strong> We provide a 3-day replacement warranty covering ONLY manufacturing defects. Claims must be submitted within exactly 3 days of receiving the order. Claims after 3 days are strictly not applicable.<br><br>
+        <strong>5. WARRANTY EXCLUSIONS:</strong> Screen-related issues and ANY physical damage are strictly NOT covered under the warranty policy.
+      </div>
+      
+      <label class="checkbox-row">
+        <input type="checkbox" required /> I have read and agree to the Privacy Policy.
+      </label>
+      <label class="checkbox-row">
+        <input type="checkbox" required /> I accept the Terms & Conditions outlined above, including the strict 3-day warranty limits and COD liability.
+      </label>
+
+      <button type="submit" id="submitOrderBtn" class="retro-btn" style="background: var(--accent-3); color: #000; font-size: 12px; margin-top: 15px;">CONFIRM ORDER</button>
+      
+      <div class="trust-badges">
+        <span>🔒 100% SECURE</span>
+        <span>🚚 FAST COD</span>
+        <span>🎁 MYSTERY GIFT UNLOCKED</span>
+      </div>
+
+      <button type="button" class="retro-btn" onclick="cancelCheckout()" style="background: #333; border-color: #555; margin-top: 15px;">CANCEL & RETURN</button>
     </form>
   </div>
 </div>
 
-<!-- SCREEN 5: SUCCESS ENDING -->
+<!-- SCREEN 5: ARCADE SUCCESS ENDING -->
 <div id="success-screen" class="screen-layer">
-  <div class="retro-box" style="padding: 6rem 3rem;">
-    <h2 style="color: var(--accent-2); font-family: var(--font-retro); font-size: 22px; margin-bottom: 30px; text-shadow:0 0 20px var(--accent-2);">ORDER SECURED</h2>
-    <p style="color: var(--text-muted); font-family:var(--font-main); font-weight:700; font-size: 15px; letter-spacing:1px;">Data successfully transmitted to headquarters.</p>
-    <div style="font-family: var(--font-retro); font-size: 32px; color: var(--accent-3); margin: 50px 0; text-shadow:0 0 20px var(--accent-3);" id="final-score">SCORE: 0000</div>
-    <button class="retro-btn scramble-text" data-text="CONTINUE BROWSING" onclick="closeSuccessScreen()" style="background: var(--accent-3); border-color: var(--accent-3); color: #000; font-weight: 900; padding:20px;">CONTINUE BROWSING</button>
+  <div class="retro-box" style="margin: 20px auto; padding: 4rem 1.5rem;">
+    <h2 class="gate-title blink-text" style="color: #0f0; font-size: 20px; text-shadow: 0 0 15px #0f0; margin-bottom: 25px;">STAGE CLEAR</h2>
+    <p class="gate-sub" style="color: #fff; font-size: 12px;">>> ORDER DATA TRANSMITTED <<</p>
+    
+    <div style="margin: 30px 0; text-align: left; display: inline-block;">
+      <div class="stat-row">RANK: <span class="stat-val">S-CLASS</span></div>
+      <div class="stat-row">EXP GAINED: <span class="stat-val" style="color: var(--accent-3); text-shadow: 0 0 8px var(--accent-3);">+5000</span></div>
+      <div class="stat-row">STATUS: <span class="stat-val" style="color: var(--accent-1); text-shadow: 0 0 8px var(--accent-1);">DISPATCH PREP</span></div>
+    </div>
+
+    <div class="score-tally" id="final-score">SCORE: 0000</div>
+
+    <button class="retro-btn" onclick="closeSuccessScreen()" style="background: var(--accent-3); color: #000; font-size: 12px; margin-top: 20px;">CONTINUE TO CATALOG</button>
   </div>
 </div>
 
 <!-- SCREEN 6: CATALOG SECTION -->
 <div id="catalog">
   <header class="cat-header">
-    <div style="font-family: var(--font-retro); font-size: 18px; color: #fff; text-shadow: 0 0 15px var(--accent-2); letter-spacing:1px;">SILLY SOCKS</div>
-    <div style="display:flex; align-items:center; gap:20px; font-family:var(--font-main); font-weight:800; font-size:12px;">
-      <span style="color:var(--text-muted);">PLAYER 1: <span id="broName" style="color:var(--text);">???</span></span>
-      <button onclick="openGameFromCatalog()" class="scramble-text" data-text="[ CODE ]" style="background:transparent; border:none; color:var(--accent-3); cursor:pointer; font-family:var(--font-main); font-weight:900; font-size:12px;">[ CODE ]</button>
+    <div class="header-logo">SILLY SOCKS</div>
+    <div class="welcome-pill">
+      PLAYER 1: <span id="broName" style="margin: 0 5px;">???</span>
+      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">[ DAY MODE ]</button>
     </div>
   </header>
 
-  <div class="ticker-wrap"><div class="ticker" id="lbTickerContainer"></div></div>
-  <div class="disc-bar">✨ HUGE SAVINGS DROPPED — FREE DELIVERY UNLOCKED — VIP ACCESS ✨</div>
+  <!-- Arcade Leaderboard Ticker (FIXED SCROLL DUPLICATION) -->
+  <div class="ticker-wrap" id="leaderboardWrap">
+    <div class="ticker" id="lbTickerContainer">
+      <span>👑 ARCADE CHAMPIONS: #1 MAFRUHA ⚡ #2 ABID ⚡ #3 TASHIN ⚡ #4 SIAM 👑</span>
+      <span>👑 ARCADE CHAMPIONS: #1 MAFRUHA ⚡ #2 ABID ⚡ #3 TASHIN ⚡ #4 SIAM 👑</span>
+    </div>
+  </div>
   
+  <div class="disc-bar" id="topDiscBar">
+    ⚡ HUGE SAVINGS DROPPED ⚡ FREE DELIVERY UNLOCKED ⚡ VIP ACCESS GRANTED
+  </div>
+  
+  <div class="page-nav">
+    <div class="page-tab active" id="tab1" onclick="showPage(1)">LVL 1: CAMS</div>
+    <div class="page-tab" id="tab2" onclick="showPage(2)">LVL 2: DECOR</div>
+  </div>
+  
+  <!-- LVL 1 (CAMERAS) -->
   <div class="cat-body" id="page1Body">
-    <div style="font-family: var(--font-retro); font-size: 14px; color: var(--text-muted); margin-bottom: 3rem; letter-spacing: 3px; border-left: 4px solid var(--accent-1); padding-left: 15px;">THE NOSTALGIA VAULT</div>
-
-    <!-- DYNAMIC 3D HOLOGRAPHIC CARD -->
-    <div class="cam-grid">
-      <div class="cam-card">
-        <div class="glare"></div>
-        <div class="img-wrapper">
-          <div style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); color: var(--accent-3); font-size: 10px; font-family: var(--font-retro); padding: 10px 15px; border-radius: 30px; border: 1px solid rgba(255,194,0,0.3); z-index:2; box-shadow:0 0 15px rgba(255,194,0,0.2);" id="flagshipBadge">BESTSELLER</div>
-          <img id="flagshipImg" src="cam_white.jpg" class="cam-img" alt="Thumb Camera" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'100%25\' height=\'100%25\' fill=\'transparent\'/><text x=\'50%25\' y=\'50%25\' font-family=\'monospace\' font-size=\'14\' fill=\'%23fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>IMG MISSING</text></svg>'" />
-        </div>
-        
-        <div class="cam-info">
-          <div class="cam-name" id="flagshipName">Cloud 99 White</div>
-          <div class="cam-vibe" id="flagshipVibe">Clean & modern</div>
-
-          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 15px 0 30px;" id="swatchRow"></div>
-
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:25px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:10px;">✦ Free nationwide delivery</div>
-            <div style="font-size:13px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:10px;">✦ Mystery gift chance</div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:25px;">
-            <label style="font-family:var(--font-main); font-size:14px; font-weight:800; display:flex; align-items:center; gap:15px; cursor:pointer;"><input type="radio" name="flagship_sd" value="without" checked onchange="updateFlagshipPrice(false); soundClick();" style="width:18px; height:18px; accent-color:var(--accent-2);"> NO SD CARD</label>
-            <label style="font-family:var(--font-main); font-size:14px; font-weight:800; display:flex; align-items:center; gap:15px; cursor:pointer;"><input type="radio" name="flagship_sd" value="with" onchange="updateFlagshipPrice(true); soundClick();" style="width:18px; height:18px; accent-color:var(--accent-2);"> 8GB SD CARD</label>
-          </div>
-
-          <div style="display:flex; align-items:center; justify-content:space-between; padding-top:25px; border-top:1px solid rgba(255,255,255,0.1); margin-bottom:30px;" id="flagshipPriceRow"></div>
-          
-          <button class="retro-btn magnetic-btn scramble-text" data-text="SECURE ITEM" onclick="buyFlagship()" style="background:var(--accent-2); color:#000; font-weight:900; font-size:13px; border:none; box-shadow:0 10px 25px rgba(5,217,232,0.4);">SECURE ITEM</button>
-        </div>
+    <div class="section-label">> THE NOSTALGIA VAULT</div>
+    
+    <!-- Explainer box with fixed Day Mode text color -->
+    <div class="explainer-box">
+      <div class="explainer-title">> WHAT YOU'RE GETTING</div>
+      <div class="explainer-list">
+        <div class="explainer-item">📸 REAL CLIP-ON CAMERA — TAKES PHOTOS & SHORT VIDEOS</div>
+        <div class="explainer-item">🔌 USB C RECHARGEABLE — NO BATTERIES NEEDED</div>
+        <div class="explainer-item">🔑 KEYCHAIN SIZE — CLIPS TO BAGS, BELTS, KEYS</div>
       </div>
+    </div>
 
-      <!-- ITEM 2: MIRROR -->
+    <div id="camGrid" class="cam-grid"></div>
+  </div>
+
+  <!-- LVL 2 (ROOM DECOR) -->
+  <div class="cat-body" id="page2Body" style="display:none;">
+    <div class="section-label">> INDUSTRIAL AESTHETICS</div>
+    <div id="mirrorGrid" class="cam-grid">
       <div class="cam-card">
-        <div class="glare"></div>
         <div class="img-wrapper">
-          <div style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); color: #fff; font-size: 10px; font-family: var(--font-retro); padding: 10px 15px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.3); z-index:2;">SHOP FAVORITE</div>
-          <img src="mirror_placeholder.jpg" class="cam-img" alt="Traffic Mirror" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'100%\' height=\'100%\' fill=\'transparent\'/><text x=\'50%\' y=\'50%\' font-family=\'monospace\' font-size=\'14\' fill=\'#fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>IMG MISSING</text></svg>'" />
+          <div class="live-watch"><div class="dot"></div> WATCHING: 18</div>
+          <img src="mirror_placeholder.jpg" class="cam-img" alt="Traffic Mirror" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'100%\' height=\'100%\' fill=\'#333\'/><text x=\'50%\' y=\'50%\' font-family=\'monospace\' font-size=\'14\' fill=\'#fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>IMG MISSING</text></svg>'" />
         </div>
         <div class="cam-info">
           <div class="cam-name">CONVEX TRAFFIC MIRROR</div>
           <div class="cam-vibe">INDUSTRIAL ORANGE / DECOR</div>
           
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:25px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:10px;">✦ Free nationwide delivery</div>
+          <div class="hype-meter-container"><div class="hype-meter-fill" style="width: 78%; background: #0f0;"></div></div>
+          <div class="hype-text" style="color: #0f0;">78% CLAIMED</div>
+
+          <div class="cam-perks">
+            <span class="perk perk-highlight">>> FREE DELIVERY NATIONWIDE</span>
+            <span class="perk">>> MYSTERY GIFT CHANCE</span>
           </div>
-          <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:25px;">
-            <label style="font-family:var(--font-main); font-size:14px; font-weight:800; display:flex; align-items:center; gap:15px; cursor:pointer;"><input type="radio" name="mirror_size" value="30cm" checked onchange="updateMirrorPrice(this); soundClick();" style="width:18px; height:18px; accent-color:var(--accent-1);"> 30 CM SIZE</label>
-            <label style="font-family:var(--font-main); font-size:14px; font-weight:800; display:flex; align-items:center; gap:15px; cursor:pointer;"><input type="radio" name="mirror_size" value="45cm" onchange="updateMirrorPrice(this); soundClick();" style="width:18px; height:18px; accent-color:var(--accent-1);"> 45 CM SIZE</label>
+          <div class="variant-toggle">
+            <label class="toggle-opt">
+              <input type="radio" id="mirror_size_30" name="mirror_size" value="30cm" checked onchange="updateMirrorPrice(this); soundClick();"> 30 CM SIZE
+            </label>
+            <label class="toggle-opt">
+              <input type="radio" id="mirror_size_45" name="mirror_size" value="45cm" onchange="updateMirrorPrice(this); soundClick();"> 45 CM SIZE
+            </label>
           </div>
           
-          <div style="display:flex; align-items:center; justify-content:space-between; padding-top:25px; border-top:1px solid rgba(255,255,255,0.1); margin-bottom:30px;" id="mirrorPriceRow">
-            <div style="display:flex; align-items:center; gap:15px;"><span style="text-decoration:line-through; color:var(--text-muted); font-size:15px; font-weight:700;">৳3600</span><span style="font-size:28px; font-weight:900;">৳3099</span></div>
-            <span style="font-weight:900; font-size:11px; background:rgba(255,42,109,0.2); color:var(--accent-1); padding:8px 14px; border-radius:20px;">SAVE ৳501</span>
+          <div class="price-row" id="mirrorPriceRow">
+            <div class="price-stack">
+              <span class="old-price">৳3600</span>
+              <span class="new-price">৳3099</span>
+            </div>
+            <span class="disc-tag">🔥 SAVE ৳501</span>
           </div>
-          <button class="retro-btn magnetic-btn scramble-text" data-text="SECURE ITEM" onclick="openCheckoutMirror()" style="background:var(--accent-1); color:#fff; font-weight:900; font-size:13px; border:none; box-shadow:0 10px 25px rgba(255,42,109,0.4);">SECURE ITEM</button>
+          <button class="buy-btn" onclick="openCheckoutMirror()">SECURE ITEM</button>
         </div>
       </div>
     </div>
   </div>
   
-  <div style="text-align: center; padding: 5rem 2rem; font-family: var(--font-main); font-weight: 700; font-size: 13px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.1); margin-top: 5rem; letter-spacing:1px;">DM US ON IG FOR INQUIRIES<br><br>ALL SECURED ORDERS ARE FINAL</div>
+  <div class="footer">
+    DM US ON IG FOR INQUIRIES<br><br>ALL SECURED ORDERS ARE FINAL
+  </div>
 </div>
 
-<!-- Floating Social Buttons -->
+<!-- Floating Action Buttons -->
 <div class="floating-actions">
-  <button class="float-btn wa-btn" onclick="window.open('https://wa.me/8801961515240', '_blank')"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.36.101 11.943c0 2.105.548 4.16 1.588 5.976L0 24l6.223-1.632c1.749.955 3.722 1.457 5.727 1.457h.005c6.581 0 11.94-5.359 11.943-11.943.001-3.19-1.24-6.19-3.378-8.433zM12.05 21.785h-.004c-1.786 0-3.54-.48-5.075-1.39l-.365-.216-3.694.968.985-3.6-.238-.375a9.86 9.86 0 01-1.516-5.229c.002-5.462 4.448-9.907 9.911-9.907 2.646 0 5.13 1.03 6.998 2.9a9.834 9.834 0 012.897 6.995c-.003 5.462-4.448 9.854-9.899 9.854z"/></svg></button>
-  <button class="float-btn ig-btn" onclick="window.open('https://www.instagram.com/your.sillysocks/', '_blank')"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 1.76-6.98 6.276-.058 1.281-.072 1.688-.072 4.947s.014 3.666.072 4.947c.2 4.515 2.622 6.076 6.98 6.276 1.28.058 1.687.072 4.947.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-1.76 6.979-6.276.059-1.281.073-1.689.073-4.947 0-3.258-.014-3.667-.072-4.947-.196-4.516-2.624-6.076-6.979-6.276-1.28-.058-1.688-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></button>
+  <div class="float-btn wa-btn" onclick="window.open('https://wa.me/8801961515240?text=Hi!%20I%20have%20a%20question%20about%20Silly%20Socks', '_blank')" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  </div>
+  <div class="float-btn ig-btn" onclick="window.open('https://www.instagram.com/your.sillysocks/', '_blank')" aria-label="Instagram">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 1.76-6.98 6.276-.058 1.281-.072 1.688-.072 4.947s.014 3.666.072 4.947c.2 4.515 2.622 6.076 6.98 6.276 1.28.058 1.687.072 4.947.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-1.76 6.979-6.276.059-1.281.073-1.689.073-4.947 0-3.258-.014-3.667-.072-4.947-.196-4.516-2.624-6.076-6.979-6.276-1.28-.058-1.688-.072-4.948-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    </svg>
+  </div>
 </div>
 
 <script>
-/* ==========================================
-   1. CANVAS NEON PARTICLE CURSOR
-========================================== */
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-let particles = [];
-let mouse = { x: -100, y: -100 };
+// ==========================================
+// 80s WEB AUDIO API SYNTHESIZER
+// ==========================================
+let audioCtx;
+let isPoweredOn = false;
+let isBgmRunning = false;
+let appliedBroCode = "";
+let gameDiscountActive = false; 
 
-window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-window.addEventListener('mousemove', (e) => {
-  mouse.x = e.clientX; mouse.y = e.clientY;
-  for(let i=0; i<2; i++) {
-    particles.push({
-      x: mouse.x, y: mouse.y,
-      vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
-      life: 1, size: Math.random() * 4 + 2,
-      color: Math.random() > 0.5 ? '#05d9e8' : '#ff2a6d'
-    });
-  }
-});
-
-function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for(let i = 0; i < particles.length; i++) {
-    let p = particles[i];
-    p.x += p.vx; p.y += p.vy; p.life -= 0.02; p.size *= 0.95;
-    if(p.life <= 0) { particles.splice(i, 1); i--; continue; }
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.globalAlpha = p.life;
-    ctx.shadowBlur = 15; ctx.shadowColor = p.color;
-    ctx.fill();
-  }
-  
-  // Draw main cursor dot
-  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
-  ctx.beginPath(); ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI*2);
-  ctx.fillStyle = "#fff"; ctx.fill();
-  
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* ==========================================
-   2. TERMINAL BOOT SEQUENCE
-========================================== */
-const bootText = "INITIATING SYSTEM MEMORY...\nESTABLISHING SECURE CONNECTION...\nLOADING NOSTALGIA ENGINE [100%]\n\n> SYSTEM READY. CLICK TO WAKE.";
-const terminalEl = document.getElementById('terminal-text');
-let bootIdx = 0;
-function typeBoot() {
-  if (bootIdx < bootText.length) {
-    terminalEl.innerHTML = bootText.substring(0, bootIdx) + '<span class="cursor-blink">█</span>';
-    bootIdx++;
-    setTimeout(typeBoot, Math.random() * 30 + 10);
-  }
-}
-typeBoot();
-
-/* ==========================================
-   3. CYBERPUNK TEXT SCRAMBLE
-========================================== */
-const scrambleChars = '!<>-_\\/[]{}—=+*^?#________';
-const scrambleElements = document.querySelectorAll('.scramble-text');
-
-scrambleElements.forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    const originalText = el.getAttribute('data-text');
-    let iterations = 0;
-    const interval = setInterval(() => {
-      el.innerText = originalText.split('').map((char, index) => {
-        if(index < iterations) return char;
-        return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-      }).join('');
-      if(iterations >= originalText.length) clearInterval(interval);
-      iterations += 1/3; // Speed of unscramble
-    }, 30);
-  });
-});
-
-/* ==========================================
-   4. GLOBAL MOUSE PARALLAX
-========================================== */
-const orb1 = document.getElementById('orb1');
-const orb2 = document.getElementById('orb2');
-const grid = document.getElementById('grid');
-
-window.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 2;
-  const y = (e.clientY / window.innerHeight - 0.5) * 2;
-  orb1.style.transform = `translate(${x * -40}px, ${y * -40}px)`;
-  orb2.style.transform = `translate(${x * 60}px, ${y * 60}px)`;
-  grid.style.transform = `perspective(1000px) rotateX(75deg) translate(${x * -30}px, 0)`;
-});
-
-/* ==========================================
-   5. WEB AUDIO SYNTH & SYSTEM WAKE
-========================================== */
-let audioCtx, masterGain;
-let isPoweredOn = false; let isBgmRunning = false; let soundEnabled = true;
-
-function initArcade() {
-  if(isPoweredOn) return; isPoweredOn = true;
-  
-  // CRT TV Turn On Effect
-  document.body.classList.add('crt-turn-on');
-  const bootScreen = document.getElementById('boot-screen');
-  bootScreen.style.opacity = '0';
-  setTimeout(() => { bootScreen.style.display = 'none'; }, 600);
-  
-  document.body.style.overflowY = 'hidden';
-  document.getElementById('hero-screen').classList.add('visible-screen');
-  document.getElementById('soundToggle').style.display = 'block';
-
-  // Start Audio
+function initAudio() {
+  if (isPoweredOn) return;
+  isPoweredOn = true;
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   audioCtx = new AudioContext();
-  masterGain = audioCtx.createGain(); masterGain.gain.value = 0.3; masterGain.connect(audioCtx.destination);
-  playTone(400, 'sine', 0.1); setTimeout(() => playTone(800, 'square', 0.2), 150);
-  startFunkyBGM();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  startBGM();
 }
 
-let nextNoteTime = 0; let current16thNote = 0; let lookahead = 25.0; let scheduleAheadTime = 0.1; let intervalID = null;
-const bassNotes = [32.70, 32.70, 38.89, 43.65, 0, 32.70, 49.00, 38.89];
-const arpNotes  = [130.81, 155.56, 196.00, 261.63];
+document.body.addEventListener('click', initAudio, {once:true});
+document.body.addEventListener('touchstart', initAudio, {once:true});
 
-function playSynth(freq, type, time, dur, vol) {
-  if(!soundEnabled) return;
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.type = type; osc.frequency.setValueAtTime(freq, time);
-  const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(freq * 4, time); filter.frequency.exponentialRampToValueAtTime(freq, time + dur);
-  gain.gain.setValueAtTime(vol, time); gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
-  osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
-  osc.start(time); osc.stop(time + dur);
+function startBGM() {
+  if (isBgmRunning) return;
+  isBgmRunning = true;
+  let t = 0;
+  let notes = [130.81, 155.56, 130.81, 196.00]; 
+  function loop() {
+    if(!isBgmRunning) return;
+    playTone(notes[t % 4], 'sawtooth', 0.2, 0.02);
+    if(t % 2 === 0) playTone(800, 'square', 0.05, 0.01); 
+    t++;
+    setTimeout(loop, 300);
+  }
+  loop();
 }
-function scheduleNote() {
-  const time = nextNoteTime;
-  if (current16thNote % 2 === 0) { let bassIdx = (current16thNote / 2) % 8; if(bassNotes[bassIdx] !== 0) playSynth(bassNotes[bassIdx], 'sawtooth', time, 0.2, 0.6); }
-  let arpFreq = arpNotes[current16thNote % 4]; playSynth(arpFreq, 'square', time, 0.1, 0.15);
+
+function stopBGM() { isBgmRunning = false; }
+
+function playTone(freq, type, duration, vol = 0.05) {
+  if (!audioCtx || audioCtx.state !== 'running') return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + duration);
 }
-function scheduler() {
-  while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
-    scheduleNote();
-    nextNoteTime += 0.25 * (60.0 / 110);
-    current16thNote++; if (current16thNote === 16) current16thNote = 0;
+
+function soundClick() { playTone(600, 'square', 0.1); }
+function soundBot() { playTone(400, 'square', 0.1, 0.03); }
+function soundError() { playTone(150, 'sawtooth', 0.4, 0.1); }
+function soundWin() {
+  setTimeout(() => playTone(440, 'sine', 0.2), 0);
+  setTimeout(() => playTone(554, 'sine', 0.2), 150);
+  setTimeout(() => playTone(659, 'sine', 0.4), 300);
+  setTimeout(() => playTone(880, 'sine', 0.6), 450);
+}
+
+function soundHack() {
+  for(let i=0; i<15; i++) { setTimeout(() => playTone(400 + (i*50), 'square', 0.05, 0.03), i*60); }
+}
+
+function toggleTheme() {
+  soundClick();
+  const body = document.body;
+  const btn = document.getElementById("themeToggle");
+  if (body.getAttribute("data-theme") === "light") {
+    body.removeAttribute("data-theme");
+    btn.textContent = "[ DAY MODE ]";
+  } else {
+    body.setAttribute("data-theme", "light");
+    btn.textContent = "[ NIGHT MODE ]";
   }
 }
-function startFunkyBGM() { if (isBgmRunning) return; isBgmRunning = true; if(audioCtx.state === 'suspended') audioCtx.resume(); nextNoteTime = audioCtx.currentTime + 0.1; intervalID = setInterval(scheduler, lookahead); }
-function stopBGM() { isBgmRunning = false; clearInterval(intervalID); }
-function toggleSound(e) { e.stopPropagation(); soundEnabled = !soundEnabled; document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 AUDIO: ON' : '🔇 AUDIO: OFF'; if(soundEnabled) startFunkyBGM(); else stopBGM(); }
-function playTone(freq, type, duration, vol = 0.1) {
-  if (!audioCtx || audioCtx.state !== 'running' || !soundEnabled) return;
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.type = type; osc.frequency.value = freq;
-  gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-  osc.connect(gain); gain.connect(masterGain); osc.start(); osc.stop(audioCtx.currentTime + duration);
+
+function createSockRain() {
+  const rainContainer = document.getElementById('sock-rain');
+  const sockCount = window.innerWidth < 768 ? 15 : 30; 
+  for(let i = 0; i < sockCount; i++) {
+    let sock = document.createElement('div');
+    sock.className = 'falling-sock';
+    sock.innerText = '🧦';
+    sock.style.left = Math.random() * 100 + 'vw';
+    sock.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    sock.style.animationDelay = (Math.random() * 5) + 's';
+    sock.style.transform = `scale(${Math.random() * 1.2 + 0.5})`;
+    rainContainer.appendChild(sock);
+  }
 }
-function soundClick() { playTone(800, 'square', 0.1, 0.1); }
-function soundBot() { playTone(300, 'square', 0.1, 0.05); }
-function soundError() { playTone(150, 'sawtooth', 0.4, 0.2); }
-function soundWin() { if(!soundEnabled) return; setTimeout(() => playTone(440, 'sine', 0.2), 0); setTimeout(() => playTone(554, 'sine', 0.2), 150); setTimeout(() => playTone(659, 'sine', 0.4), 300); setTimeout(() => playTone(880, 'sine', 0.6), 450); }
+createSockRain();
 
-/* ==========================================
-   6. MAGNETIC BUTTONS & HOLOGRAPHIC 3D TILT
-========================================== */
-document.querySelectorAll('.magnetic-btn').forEach(btn => {
-  btn.addEventListener('mousemove', function(e) {
-    const rect = this.getBoundingClientRect();
-    const dx = e.clientX - (rect.left + rect.width / 2);
-    const dy = e.clientY - (rect.top + rect.height / 2);
-    this.style.transform = `translate(${dx * 0.2}px, ${dy * 0.2}px)`;
-  });
-  btn.addEventListener('mouseleave', function() { this.style.transform = 'translate(0px, 0px)'; });
-});
-
-document.querySelectorAll('.cam-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-    const centerX = rect.width / 2; const centerY = rect.height / 2;
-    card.style.transform = `perspective(1800px) rotateX(${((y - centerY) / centerY) * -15}deg) rotateY(${((x - centerX) / centerX) * 15}deg) scale3d(1.03, 1.03, 1.03)`;
-    const glare = card.querySelector('.glare');
-    if(glare) glare.style.backgroundPosition = `${x}px ${y}px`; // Moves foil gradient
-  });
-  card.addEventListener('mouseleave', () => { card.style.transform = `perspective(1800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`; });
-});
-
-/* ==========================================
-   CORE LOGIC (NAVIGATION & GAMES)
-========================================== */
-let hasEnteredHero = false; let gameDiscountActive = false; let appliedBroCode = "";
+// --- Navigation Routing ---
+let hasEnteredHero = false;
+const heroScreen = document.getElementById('hero-screen');
+const tttScreen = document.getElementById('tictactoe-screen');
+const catalog = document.getElementById('catalog');
+const checkoutScreen = document.getElementById('checkout-screen');
+const successScreen = document.getElementById('success-screen');
 
 function leaveHero(target) {
-  if (hasEnteredHero) return; hasEnteredHero = true; soundClick();
-  const hero = document.getElementById('hero-screen'); hero.style.transform = 'scale(1.1)'; hero.style.opacity = '0';
-  document.getElementById('soundToggle').style.display = 'none';
-  if (target === 'game') { document.getElementById('tictactoe-screen').classList.add('visible-screen'); setTimeout(() => { hero.classList.remove('visible-screen'); }, 800); } 
-  else { setTimeout(() => { hero.classList.remove('visible-screen'); skipToCatalog(); }, 500); }
+  if (hasEnteredHero) return;
+  hasEnteredHero = true;
+  
+  initAudio(); 
+  soundClick();
+  
+  heroScreen.style.transform = 'translateY(-100vh) scale(1.5)';
+  heroScreen.style.opacity = '0';
+  
+  if (target === 'game') {
+    tttScreen.style.display = 'flex';
+    setTimeout(() => {
+      heroScreen.style.display = 'none';
+      tttScreen.classList.add('visible');
+    }, 600);
+  } else {
+    setTimeout(() => {
+      heroScreen.style.display = 'none';
+      skipToCatalog();
+    }, 500);
+  }
 }
 
-let board = ["", "", "", "", "", "", "", "", ""]; let gameActive = true; const cells = document.querySelectorAll('.ttt-cell'); const statusText = document.getElementById('ttt-status');
+// --- Tic-Tac-Toe Game Logic ---
+let board = ["", "", "", "", "", "", "", "", ""];
+let gameActive = true;
+const cells = document.querySelectorAll('.ttt-cell');
+const statusText = document.getElementById('ttt-status');
+
+const drawMsgs = [
+  "STALEMATE. NO 5% FOR TIES.", 
+  "DRAW. YOUR BRAIN IS TOO SLOW.", 
+  "TIE! SERIOUSLY? TRY HARDER OR GIVE UP."
+];
+const lossMsgs = [
+  "BOT DESTROYED YOU. JUST GIVE UP?", 
+  "SKILL ISSUE DETECTED. WANNA CRY?", 
+  "PATHETIC. BOT WINS. TRY AGAIN?"
+];
+
 function makeMove(index) {
   if(board[index] !== "" || !gameActive) return;
-  soundClick(); board[index] = "X"; updateBoard();
-  if(checkWin("X")) { endGame("YOU WIN! 10% DISCOUNT UNLOCKED...", true); return; }
-  if(board.indexOf("") === -1) { endGame("STALEMATE. TOO SLOW.", false); return; }
-  gameActive = false; statusText.innerText = "BOT IS THINKING..."; setTimeout(botMove, 500);
+  soundClick();
+  board[index] = "X";
+  updateBoard();
+  
+  if(checkWin("X")) { endGame("YOU WIN! 5% DISCOUNT UNLOCKED...", true); return; }
+  if(board.indexOf("") === -1) { endGame(drawMsgs[Math.floor(Math.random() * drawMsgs.length)], false); return; }
+  
+  gameActive = false;
+  statusText.innerText = "BOT IS THINKING...";
+  statusText.style.color = "var(--accent-3)";
+  setTimeout(botMove, 600);
 }
-function botMove() {
-  soundBot(); board[getBestMove()] = "O"; updateBoard();
-  if(checkWin("O")) { endGame("BOT DESTROYED YOU.", false); return; }
-  if(board.indexOf("") === -1) { endGame("DRAW.", false); return; }
-  statusText.innerText = "PLAYER 1 IS 'X'. YOUR TURN!"; gameActive = true;
-}
+
+// Hard Bot Logic
 function getBestMove() {
-  let move = findWinningMove("O"); if (move !== -1) return move;
-  move = findWinningMove("X"); if (move !== -1) return move;
+  let move = findWinningMove("O");
+  if (move !== -1) return move;
+  move = findWinningMove("X");
+  if (move !== -1) return move;
   if (board[4] === "") return 4;
-  let empty = []; for(let i=0; i<9; i++) if(board[i]==="") empty.push(i); return empty[Math.floor(Math.random() * empty.length)];
+  let corners = [0, 2, 6, 8].filter(i => board[i] === "");
+  if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
+  let emptyIndices = [];
+  for(let i=0; i<9; i++) { if(board[i] === "") emptyIndices.push(i); }
+  return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
 }
-function findWinningMove(p) {
-  const wp = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-  for(let i=0; i<wp.length; i++) {
-    let count=0, empty=-1;
-    for(let j=0; j<3; j++) { if(board[wp[i][j]]===p) count++; else if(board[wp[i][j]]==="") empty=wp[i][j]; }
-    if(count===2 && empty!==-1) return empty;
+
+function findWinningMove(player) {
+  const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+  for(let i=0; i<winPatterns.length; i++) {
+    let p = winPatterns[i];
+    let pCount = 0, emptyIdx = -1;
+    for(let j=0; j<3; j++) {
+      if(board[p[j]] === player) pCount++;
+      else if(board[p[j]] === "") emptyIdx = p[j];
+    }
+    if(pCount === 2 && emptyIdx !== -1) return emptyIdx;
   }
   return -1;
 }
-function updateBoard() { cells.forEach((c, i) => { c.innerText = board[i]; c.className = "ttt-cell " + (board[i]==="X"?"x":(board[i]==="O"?"o":"")); }); }
-function checkWin(p) { const wp = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]; return wp.some(pat => pat.every(idx => board[idx] === p)); }
-function endGame(msg, won) {
-  gameActive = false; statusText.innerText = msg;
-  if(won) { statusText.style.color = "var(--accent-2)"; soundWin(); gameDiscountActive = true; appliedBroCode = "ARCADE10"; setTimeout(() => { showGate(true); }, 1500); } 
-  else { statusText.style.color = "var(--accent-1)"; soundError(); document.getElementById('resetTttBtn').style.display = "inline-block"; }
-}
-function resetBoard() { soundClick(); board = ["","","","","","","","",""]; gameActive = true; updateBoard(); statusText.innerText = "PLAYER 1 IS 'X'. YOUR TURN!"; document.getElementById('resetTttBtn').style.display = "none"; }
 
-function openGameFromCatalog() { soundClick(); document.getElementById('catalog').style.opacity = '0'; setTimeout(() => { document.getElementById('catalog').style.display = 'none'; document.body.style.overflowY = 'hidden'; document.getElementById('tictactoe-screen').classList.add('visible-screen'); }, 500); }
+function botMove() {
+  let emptyIndices = [];
+  for(let i=0; i<9; i++) { if(board[i] === "") emptyIndices.push(i); }
+  if(emptyIndices.length === 0) return;
+  
+  soundBot();
+  let bestMove = getBestMove();
+  board[bestMove] = "O";
+  updateBoard();
+  
+  if(checkWin("O")) { endGame(lossMsgs[Math.floor(Math.random() * lossMsgs.length)], false); return; }
+  if(board.indexOf("") === -1) { endGame(drawMsgs[Math.floor(Math.random() * drawMsgs.length)], false); return; }
+  
+  statusText.innerText = "PLAYER 1 IS 'X'. YOUR TURN!";
+  statusText.style.color = "var(--accent-3)";
+  gameActive = true;
+}
+
+function updateBoard() {
+  cells.forEach((cell, i) => {
+    cell.innerText = board[i];
+    cell.className = "ttt-cell " + (board[i] === "X" ? "x" : (board[i] === "O" ? "o" : ""));
+  });
+}
+
+function checkWin(player) {
+  const winPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
+  return winPatterns.some(pattern => pattern.every(index => board[index] === player));
+}
+
+function endGame(msg, playerWon) {
+  gameActive = false;
+  statusText.innerText = msg;
+  if(playerWon) {
+    statusText.style.color = "#0f0";
+    soundWin();
+    gameDiscountActive = true; 
+    appliedBroCode = "ARCADE5";
+    setTimeout(() => { skipToCatalog(); }, 1500); 
+  } else {
+    statusText.style.color = "#ff00ff";
+    soundError();
+    document.getElementById('resetTttBtn').style.display = "block";
+    document.getElementById('resetTttBtn').innerText = "TRY AGAIN (IF YOU DARE)";
+  }
+}
+
+function resetBoard() {
+  soundClick();
+  board = ["", "", "", "", "", "", "", "", ""];
+  gameActive = true;
+  updateBoard();
+  statusText.innerText = "PLAYER 1 IS 'X'. YOUR TURN!";
+  statusText.style.color = "var(--accent-3)";
+  document.getElementById('resetTttBtn').style.display = "none";
+}
+
+// --- DIRECT SKIP TO CATALOG ---
 function skipToCatalog() {
-  soundClick(); stopBGM();
-  const screen = document.querySelector('.visible-screen'); if(screen) { screen.style.opacity = '0'; screen.style.transform = 'scale(0.9)'; setTimeout(() => screen.classList.remove('visible-screen'), 800); }
-  setTimeout(() => { document.body.style.overflowY = 'auto'; document.getElementById("broName").textContent = "GUEST"; renderLeaderboard(); refreshCatalogPrices(); document.getElementById('catalog').style.display = 'block'; setTimeout(() => { document.getElementById('catalog').style.opacity = '1'; }, 50); }, 800);
-}
-
-var allowedList = "mafruha|siam|abid|authai|rifah|fatima|azha|namira|maddie|nafisa|nayla|faysol|labby|mamun|sayemrohitkarmakar|nafisalubabaetu|mirzaabdulkhaled|namiraahmedshams|ishmamalam|farhanmasud|aunu|labbyahsan|jarinsubahshifa|nafisanoor|sabilaanjum|miswaralam|abdullahaljawad|tasin|arshan|ahnaf".split("|");
-var prettyList  = "Mafruha|Siam|Abid|Authai|Rifah|Fatima|Azha|Namira|Maddie|Nafisa|Nayla|Faysol|Labby|Mamun|Sayem Rohit Karmakar|Nafisa Lubaba Etu|Mirza Abdul Khaled|Namira Ahmed Shams|Ishmam Alam|Farhan Masud|Aunu|Labby Ahsan|Jarin Subah Shifa|Nafisa Noor|Sabila Anjum|Miswar Alam|Abdullah Al Jawad|Tasin|Arshan|Ahnaf".split("|");
-
-function showGate(autoUnlock) {
-  soundClick(); document.getElementById('tictactoe-screen').classList.remove('visible-screen');
+  soundClick();
+  stopBGM();
+  tttScreen.style.opacity = "0";
+  tttScreen.style.transform = "scale(0.5)";
+  tttScreen.style.pointerEvents = "none";
+  document.body.style.overflowY = 'auto';
+  
   setTimeout(() => {
-    document.getElementById('gate').classList.add('visible-screen');
-    if(autoUnlock) { document.getElementById('gate-input-area').style.display = 'none'; document.getElementById('gate-title').innerText = "SYSTEM HACKING..."; setTimeout(() => { document.getElementById('gate-title').innerText = "ACCESS GRANTED"; document.getElementById('gate-title').style.color = "var(--accent-2)"; document.getElementById('lb-input-area').style.display = 'flex'; }, 1500); } 
-    else { document.getElementById('gate-input-area').style.display = 'flex'; document.getElementById('lb-input-area').style.display = 'none'; }
-  }, 800);
+    tttScreen.style.display = "none";
+    catalog.style.display = "block";
+    document.getElementById("broName").textContent = "GUEST";
+    
+    // Check if won game, refresh UI
+    if (gameDiscountActive) {
+      document.getElementById('topDiscBar').innerHTML = "⚡ 🎮 5% GAME WINNER DISCOUNT UNLOCKED! ⚡ FREE SHIPPING NATIONWIDE ⚡";
+      document.getElementById('topDiscBar').style.background = "#0f0";
+      document.getElementById('topDiscBar').style.color = "#000";
+      document.getElementById('topDiscBar').style.fontWeight = "900";
+      document.getElementById('camGrid').innerHTML = ""; 
+      renderGrid(camData, "camGrid", "p1_"); // Re-render grid with discounted prices
+    }
+
+    renderLeaderboard();
+    
+    setTimeout(() => {
+      catalog.classList.add("visible");
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 50);
+  }, 600);
 }
-function checkCode() {
-  soundClick(); var val = document.getElementById("refInput").value.toLowerCase().trim(); var idx = allowedList.indexOf(val);
-  if(idx > -1) { document.getElementById("errMsg").style.display = "none"; gameDiscountActive = true; appliedBroCode = val.toUpperCase(); document.getElementById('gate-title').innerText = "ACCESS GRANTED"; document.getElementById('gate-title').style.color = "var(--accent-2)"; setTimeout(() => { updateLeaderboard(prettyList[idx]); unlockCatalog(prettyList[idx]); }, 1200); } 
-  else { soundError(); document.getElementById("errMsg").style.display = "block"; }
-}
-function saveInitialsAndEnter() { soundClick(); let n = document.getElementById('lbInput').value || "CHAMPION"; updateLeaderboard(n); unlockCatalog(n.toUpperCase()); }
-function unlockCatalog(playerName) {
-  stopBGM(); document.getElementById('gate').classList.remove('visible-screen');
-  setTimeout(() => { document.body.style.overflowY = 'auto'; document.getElementById("broName").textContent = playerName; renderLeaderboard(); refreshCatalogPrices(); document.getElementById('catalog').style.display = 'block'; setTimeout(() => { document.getElementById('catalog').style.opacity = '1'; }, 50); }, 800);
-}
+
+// --- Leaderboard ---
 function updateLeaderboard(name) {
-  let localLb = JSON.parse(localStorage.getItem('sillySocksLB') || '[]'); let globalLb = ["SHIHAB", "SIAM", "ABID", "MADDIE", "MAMUN"];
-  if(name && name !== "GUEST") localLb.unshift(name.toUpperCase()); localStorage.setItem('sillySocksLB', JSON.stringify(localLb));
-  let tickerHTML = "✦ ARCADE CHAMPIONS: " + [...new Set([...localLb, ...globalLb])].slice(0, 10).map((n, i) => `#${i+1} ${n}`).join(" ✧ ") + " ✦";
+  let localLb = JSON.parse(localStorage.getItem('sillySocksLB') || '[]');
+  let globalLb = ["SHIHAB", "SIAM", "ABID", "MADDIE", "MAMUN"];
+  
+  if(name && name !== "GUEST") localLb.unshift(name.toUpperCase());
+  localStorage.setItem('sillySocksLB', JSON.stringify(localLb));
+  
+  let combined = [...localLb, ...globalLb];
+  let uniqueLb = [...new Set(combined)].slice(0, 10);
+  
+  let tickerHTML = "👑 ARCADE CHAMPIONS: ";
+  tickerHTML += uniqueLb.map((n, i) => `#${i+1} ${n}`).join(" ⚡ ") + " 👑";
+  
   document.getElementById('lbTickerContainer').innerHTML = `<span>${tickerHTML}</span><span>${tickerHTML}</span>`;
 }
 function renderLeaderboard() { updateLeaderboard(); }
-function refreshCatalogPrices() { updateFlagshipPrice(currentSD); var mirrorRadio = document.querySelector('input[name="mirror_size"]:checked'); if(mirrorRadio) updateMirrorPrice(mirrorRadio); }
+
+
+// Dynamic Checkout Savings Banner Updater
 function updateCheckoutSavingsBanner() {
-  const a = document.getElementById('form-addons').value; const banner = document.getElementById('checkout-savings-banner'); let s = 400;
-  if (a.includes("1619")) s = 580; else if (a.includes("2249")) s = 750; else if (a.includes("2789")) s = 811; else if (a.includes("3239")) s = 961; else if (a.includes("Without SD card 1799")) s = 400; else if (a.includes("With 8GB SD card 2499")) s = 500; else if (a.includes("30cm")) s = 501; else if (a.includes("45cm")) s = 601;
-  banner.innerText = `✨ SAVING ৳${s} + FREE SHIPPING`;
+  const addonSelect = document.getElementById('form-addons');
+  const banner = document.getElementById('checkout-savings-banner');
+  let savings = 0;
+  
+  if (addonSelect.value.includes("1709")) { savings = 790; } 
+  else if (addonSelect.value.includes("2279")) { savings = 920; } 
+  else if (addonSelect.value.includes("2944")) { savings = 656; } 
+  else if (addonSelect.value.includes("3419")) { savings = 781; } 
+  else if (addonSelect.value.includes("Without SD card 1799")) { savings = 400; } 
+  else if (addonSelect.value.includes("With 8GB SD card 2199")) { savings = 500; } 
+  else if (addonSelect.value.includes("30 cm")) { savings = 501; } 
+  else if (addonSelect.value.includes("45 cm")) { savings = 601; } 
+  else { savings = 400; }
+
+  banner.innerText = `⚡ YOU ARE SAVING ৳${savings} TODAY + FREE SHIPPING ⚡`;
 }
 
+// --- SECURE CHECKOUT LOGIC FOR CAMERA GEAR ---
 function openCheckout(itemColor, isWithSD) {
-  soundClick(); document.getElementById('catalog').style.opacity = "0";
+  soundClick();
+  document.getElementById('catalog').style.opacity = "0";
+  
   setTimeout(() => {
     document.getElementById('catalog').style.display = "none";
-    document.getElementById('form-color').innerHTML = `<option value="White">White</option><option value="Red">Red</option><option value="Yellow">Yellow</option><option value="Green">Green</option><option value="Black">Black</option><option value="Blue">Blue</option><option value="Grey">Grey</option><option value="Transparent">Transparent</option><option value="Light Green">Light Green</option>`;
-    document.getElementById('form-color').value = itemColor;
+    
+    let colorDropdown = document.getElementById('form-color');
+    colorDropdown.innerHTML = `
+      <option value="White">White</option>
+      <option value="Red">Red</option>
+      <option value="Yellow">Yellow</option>
+      <option value="Green">Green</option>
+      <option value="Black">Black</option>
+      <option value="Blue">Blue</option>
+      <option value="Grey">Grey</option>
+      <option value="Transparent">Transparent</option>
+      <option value="Light Green">Light Green</option>
+    `;
+    colorDropdown.value = itemColor;
+
     let addonDropdown = document.getElementById('form-addons');
-    if (gameDiscountActive) { addonDropdown.innerHTML = `<option value="Without SD card (10% OFF) 1619">NO SD CARD (1619)</option><option value="With 8GB SD card (10% OFF) 2249">8GB SD CARD (2249)</option>`; addonDropdown.value = isWithSD ? "With 8GB SD card (10% OFF) 2249" : "Without SD card (10% OFF) 1619"; } 
-    else { addonDropdown.innerHTML = `<option value="Without SD card 1799">NO SD CARD (1799)</option><option value="With 8GB SD card 2499">8GB SD CARD (2499)</option>`; addonDropdown.value = isWithSD ? "With 8GB SD card 2499" : "Without SD card 1799"; }
-    document.getElementById('form-brocode').value = appliedBroCode || (gameDiscountActive ? "ARCADE10" : ""); updateCheckoutSavingsBanner();
-    document.getElementById('checkout-screen').classList.add('visible-screen'); window.scrollTo(0,0); 
-  }, 500);
+    if (gameDiscountActive) {
+      addonDropdown.innerHTML = `
+        <option value="Without SD card (5% OFF) 1709">Without SD card 1709 (5% OFF)</option>
+        <option value="With 8GB SD card (5% OFF) 2089">With 8GB SD card 2089 (5% OFF)</option>
+      `;
+      addonDropdown.value = isWithSD ? "With 8GB SD card (5% OFF) 2089" : "Without SD card (5% OFF) 1709";
+    } else {
+      addonDropdown.innerHTML = `
+        <option value="Without SD card 1799">Without SD card 1799</option>
+        <option value="With 8GB SD card 2199">With 8GB SD card 2199</option>
+      `;
+      addonDropdown.value = isWithSD ? "With 8GB SD card 2199" : "Without SD card 1799";
+    }
+
+    document.getElementById('lbl-color').innerText = "> SELECT PRODUCT COLOR *";
+    document.getElementById('lbl-addons').innerText = "> CHOOSE ADD-ONS *";
+    document.getElementById('form-brocode').value = appliedBroCode;
+    
+    updateCheckoutSavingsBanner();
+
+    checkoutScreen.style.display = "flex";
+    setTimeout(() => { 
+      checkoutScreen.classList.add('visible'); 
+      window.scrollTo(0,0); 
+    }, 50);
+  }, 400);
 }
+
+// --- SECURE CHECKOUT LOGIC FOR MIRROR ---
 function openCheckoutMirror() {
-  soundClick(); document.getElementById('catalog').style.opacity = "0";
+  soundClick();
+  document.getElementById('catalog').style.opacity = "0";
+  
   setTimeout(() => {
-    document.getElementById('catalog').style.display = "none"; document.getElementById('form-color').innerHTML = '<option value="Orange">Orange</option>'; document.getElementById('form-color').value = "Orange";
-    let is30 = document.getElementById('mirror_size_30').checked; let addonDropdown = document.getElementById('form-addons');
-    if (gameDiscountActive) { addonDropdown.innerHTML = `<option value="30 cm (10% OFF) 2789">30 CM (2789)</option><option value="45 cm (10% OFF) 3239">45 CM (3239)</option>`; addonDropdown.value = is30 ? "30 cm (10% OFF) 2789" : "45 cm (10% OFF) 3239"; } 
-    else { addonDropdown.innerHTML = `<option value="30 cm (3099)">30 CM (3099)</option><option value="45 cm (3599)">45 CM (3599)</option>`; addonDropdown.value = is30 ? "30 cm (3099)" : "45 cm (3599)"; }
-    document.getElementById('form-brocode').value = appliedBroCode || (gameDiscountActive ? "ARCADE10" : ""); updateCheckoutSavingsBanner();
-    document.getElementById('checkout-screen').classList.add('visible-screen'); window.scrollTo(0,0); 
-  }, 500);
+    document.getElementById('catalog').style.display = "none";
+    
+    let colorDropdown = document.getElementById('form-color');
+    colorDropdown.innerHTML = '<option value="Orange">Orange</option>';
+    colorDropdown.value = "Orange";
+
+    let is30 = document.getElementById('mirror_size_30').checked;
+    let addonDropdown = document.getElementById('form-addons');
+    
+    if (gameDiscountActive) {
+      addonDropdown.innerHTML = `
+        <option value="30 cm (5% OFF) 2944">30 cm 2944 (5% OFF)</option>
+        <option value="45 cm (5% OFF) 3419">45 cm 3419 (5% OFF)</option>
+      `;
+      addonDropdown.value = is30 ? "30 cm (5% OFF) 2944" : "45 cm (5% OFF) 3419";
+    } else {
+      addonDropdown.innerHTML = `
+        <option value="30 cm (3099)">30 cm (3099)</option>
+        <option value="45 cm (3599)">45 cm (3599)</option>
+      `;
+      addonDropdown.value = is30 ? "30 cm (3099)" : "45 cm (3599)";
+    }
+
+    document.getElementById('lbl-color').innerText = "> SELECT COLOR (ORANGE ONLY) *";
+    document.getElementById('lbl-addons').innerText = "> CHOOSE MIRROR SIZE *";
+    document.getElementById('form-brocode').value = appliedBroCode;
+    
+    updateCheckoutSavingsBanner();
+
+    checkoutScreen.style.display = "flex";
+    setTimeout(() => { 
+      checkoutScreen.classList.add('visible'); 
+      window.scrollTo(0,0); 
+    }, 50);
+  }, 400);
 }
-function cancelCheckout() { soundClick(); document.getElementById('checkout-screen').classList.remove('visible-screen'); setTimeout(() => { document.getElementById('catalog').style.display = "block"; setTimeout(() => { document.getElementById('catalog').style.opacity = "1"; }, 50); }, 500); }
-function toggleBkash(show) { var bkashField = document.getElementById('bkash-field'); var trxInput = document.getElementById('trx-input'); if (show) { bkashField.style.display = "flex"; trxInput.setAttribute('required', 'true'); } else { bkashField.style.display = "none"; trxInput.removeAttribute('required'); trxInput.value = ''; } }
+
+function cancelCheckout() {
+  soundClick();
+  checkoutScreen.classList.remove('visible');
+  setTimeout(() => {
+    checkoutScreen.style.display = "none";
+    document.getElementById('catalog').style.display = "block";
+    setTimeout(() => { 
+      document.getElementById('catalog').style.opacity = "1"; 
+      window.scrollTo(0,0);
+    }, 50);
+  }, 400);
+}
+
+function toggleBkash(show) {
+  var bkashField = document.getElementById('bkash-field');
+  var trxInput = document.getElementById('trx-input');
+  if (show) {
+    bkashField.style.display = "flex";
+    trxInput.setAttribute('required', 'true');
+  } else {
+    bkashField.style.display = "none";
+    trxInput.removeAttribute('required');
+    trxInput.value = '';
+  }
+}
+
+// --- ARCADE SUCCESS SCORE ANIMATION ---
 function animateScore() {
-  let scoreObj = document.getElementById("final-score"); let score = 0;
+  let scoreObj = document.getElementById("final-score");
+  let score = 0;
+  let target = 9999;
   let interval = setInterval(() => {
     score += Math.floor(Math.random() * 500) + 100;
-    if(score >= 9999) { score = 9999; clearInterval(interval); if(soundEnabled) playTone(880, 'sine', 0.5); } else { if(soundEnabled) playTone(400 + (score % 200), 'square', 0.02, 0.01); }
+    if(score >= target) {
+      score = target;
+      clearInterval(interval);
+      playTone(880, 'sine', 0.5); 
+    } else {
+      playTone(400 + (score % 200), 'square', 0.02, 0.01); 
+    }
     scoreObj.innerText = "SCORE: " + score.toString().padStart(4, '0');
   }, 30);
 }
-function closeSuccessScreen() { soundClick(); document.getElementById('success-screen').classList.remove('visible-screen'); setTimeout(() => { document.getElementById('catalog').style.display = "block"; setTimeout(() => { document.getElementById('catalog').style.opacity = "1"; }, 50); }, 500); }
 
+function closeSuccessScreen() {
+  soundClick();
+  successScreen.classList.remove('visible');
+  setTimeout(() => {
+    successScreen.style.display = "none";
+    document.getElementById('catalog').style.display = "block";
+    setTimeout(() => { 
+      document.getElementById('catalog').style.opacity = "1"; 
+      window.scrollTo(0,0); 
+    }, 50);
+  }, 400);
+}
+
+// --- AJAX Form Submit to Google Apps Script & Discord ---
 document.getElementById("orderForm").addEventListener("submit", function(e) {
-  e.preventDefault(); soundClick();
-  var btn = document.getElementById("submitOrderBtn"); btn.innerText = "TRANSMITTING..."; btn.style.pointerEvents = "none";
-  fetch("https://script.google.com/macros/s/AKfycbyDypfbtTiAInwL_VfCtUOIWNp02PANmIf7Svj2uj1JUVCeaR-fqE4gLm6jA-Ssv4M/exec", { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(this)).toString() })
-  .then(() => {
-    btn.innerText = "ORDER SECURED!"; soundWin();
+  e.preventDefault(); 
+  soundClick();
+  
+  var btn = document.getElementById("submitOrderBtn");
+  btn.innerText = "TRANSMITTING...";
+  btn.style.pointerEvents = "none";
+  btn.style.opacity = "0.7";
+
+  var googleScriptURL = "https://script.google.com/macros/s/AKfycbyDypfbtTiAInwL_VfCtUOIWNp02PANmIf7Svj2uj1JUVCeaR-fqE4gLm6jA-Ssv4M/exec";
+  var discordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; // <--- PASTE DISCORD WEBHOOK LINK HERE
+
+  var searchParams = new URLSearchParams();
+  var formData = new FormData(this);
+  for (var pair of formData.entries()) {
+    searchParams.append(pair[0], pair[1]);
+  }
+
+  // Dual Sync: Send to Discord
+  if (discordWebhookURL && discordWebhookURL !== "YOUR_DISCORD_WEBHOOK_URL_HERE") {
+    var discordPayload = {
+      content: "🚨 **NEW ARCADE DROP ORDER!** 🚨",
+      embeds: [{
+        title: "Order Details",
+        color: 65280,
+        fields: [
+          { name: "👤 Name", value: formData.get("Full Name") || "N/A", inline: true },
+          { name: "📱 Phone", value: formData.get("Phone Number") || "N/A", inline: true },
+          { name: "🎨 Product & Color", value: formData.get("Product Color") || "N/A", inline: true },
+          { name: "📦 Add-ons / Size", value: formData.get("Add-ons") || "N/A", inline: false },
+          { name: "🔢 Quantity", value: formData.get("Quantity") || "1", inline: true },
+          { name: "💳 Payment Method", value: formData.get("Payment Method") || "N/A", inline: true },
+          { name: "💸 bKash Trx ID", value: formData.get("Transaction ID") || "None (COD)", inline: true },
+          { name: "🎟️ Bro Code", value: formData.get("BRO CODE") || "None", inline: true },
+          { name: "🏠 Address", value: formData.get("Delivery Address") || "N/A", inline: false }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
+
+    fetch(discordWebhookURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(discordPayload)
+    }).catch(err => console.log(err));
+  }
+
+  // Dual Sync: Send to Google Sheets
+  fetch(googleScriptURL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: searchParams.toString()
+  })
+  .then(response => {
+    btn.innerText = "ORDER SECURED!";
+    btn.style.background = "#0f0";
+    soundWin();
+    
     setTimeout(() => {
-       document.getElementById('checkout-screen').classList.remove('visible-screen');
-       setTimeout(() => { document.getElementById('success-screen').classList.add('visible-screen'); animateScore(); }, 500);
-       btn.innerText = "CONFIRM ORDER"; btn.style.pointerEvents = "auto"; document.getElementById("orderForm").reset(); toggleBkash(false);
+       checkoutScreen.classList.remove('visible');
+       setTimeout(() => {
+           checkoutScreen.style.display = "none";
+           successScreen.style.display = "flex";
+           setTimeout(() => {
+               successScreen.classList.add('visible');
+               animateScore(); 
+           }, 50);
+       }, 400);
+
+       btn.innerText = "CONFIRM ORDER";
+       btn.style.pointerEvents = "auto";
+       btn.style.opacity = "1";
+       btn.style.background = "var(--accent-3)";
+       document.getElementById("orderForm").reset();
+       toggleBkash(false);
     }, 1500);
-  }).catch(() => { soundError(); alert("ERROR."); btn.innerText = "CONFIRM ORDER"; btn.style.pointerEvents = "auto"; });
+  })
+  .catch(error => {
+     soundError();
+     alert("TRANSMISSION ERROR. PLEASE TRY AGAIN.");
+     btn.innerText = "CONFIRM ORDER";
+     btn.style.pointerEvents = "auto";
+     btn.style.opacity = "1";
+  });
 });
 
-var camColors = [ { n:"Cloud 99 White", v:"Clean & modern", i:"cam_white.jpg", c:"White", swatch:"#ffffff", badge:"BESTSELLER" }, { n:"Midnight Black", v:"Neon noir aesthetic", i:"cam_black.jpg", c:"Black", swatch:"#111111", badge:"BESTSELLER" }, { n:"Clear Gameboy", v:"Raw Y2K tech", i:"cam_transparent.jpg", c:"Transparent", swatch:"#d9f7ff", badge:"BESTSELLER" }, { n:"Glitch Green", v:"90s personality", i:"cam_green.jpg", c:"Green", swatch:"#39ff6a", badge:"FAN FAVORITE" }, { n:"Arcade Red", v:"Bold streetwear energy", i:"cam_red.jpg", c:"Red", swatch:"#ff2b2b", badge:"FAN FAVORITE" }, { n:"Pac-Maze Yellow", v:"Sunny 80s nostalgia", i:"cam_yellow.jpg", c:"Yellow", swatch:"#ffe23d", badge:"FAN FAVORITE" }, { n:"Synthwave Blue", v:"Cool coastal feel", i:"cam_blue.jpg", c:"Blue", swatch:"#3d8bff", badge:"FAN FAVORITE" }, { n:"Mint Condition", v:"Rare retro drop", i:"cam_lightgreen.jpg", c:"Light Green", swatch:"#b6ffcf", badge:"FAN FAVORITE" }, { n:"Console Grey", v:"Classic 8-bit vibes", i:"cam_grey.jpg", c:"Grey", swatch:"#9a9a9a", badge:"FAN FAVORITE" } ];
-var currentColorIdx = 0; var currentSD = false;
-function renderSwatches() {
-  var row = document.getElementById('swatchRow'); row.innerHTML = '';
-  camColors.forEach((col, i) => {
-    var sw = document.createElement('div'); sw.className = 'swatch'; sw.style.background = col.swatch;
-    sw.style.width = '42px'; sw.style.height = '42px'; sw.style.borderRadius = '50%'; sw.style.border = '2px solid rgba(255,255,255,0.2)'; sw.style.cursor = 'pointer'; sw.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
-    if (i === currentColorIdx) { sw.style.borderColor = 'var(--accent-2)'; sw.style.transform = 'scale(1.25)'; sw.style.boxShadow = '0 5px 20px rgba(5,217,232,0.5)'; }
-    sw.onclick = function() { soundClick(); currentColorIdx = i; document.getElementById('flagshipImg').src = camColors[i].i; document.getElementById('flagshipName').innerText = camColors[i].n; document.getElementById('flagshipVibe').innerText = camColors[i].v; document.getElementById('flagshipBadge').innerText = camColors[i].badge; renderSwatches(); };
-    row.appendChild(sw);
-  });
-}
-function updateFlagshipPrice(isWithSD) {
-  currentSD = isWithSD; let oldP = isWithSD ? 2999 : 2199; let baseP = isWithSD ? 2499 : 1799;
-  if (gameDiscountActive) { document.getElementById('flagshipPriceRow').innerHTML = `<div style="display:flex; align-items:center; gap:15px;"><span style="text-decoration:line-through; color:var(--text-muted); font-size:15px; font-weight:700;">৳${oldP}</span><span style="font-size:32px; font-weight:900; color:var(--accent-2);">৳${isWithSD ? 2249 : 1619}</span></div><span style="background:rgba(5,217,232,0.2); color:var(--accent-2); padding:8px 14px; font-weight:900; font-size:11px; border-radius:20px;">10% OFF</span>`; } 
-  else { document.getElementById('flagshipPriceRow').innerHTML = `<div style="display:flex; align-items:center; gap:15px;"><span style="text-decoration:line-through; color:var(--text-muted); font-size:15px; font-weight:700;">৳${oldP}</span><span style="font-size:32px; font-weight:900;">৳${baseP}</span></div><span style="background:rgba(255,42,109,0.2); color:var(--accent-1); padding:8px 14px; font-weight:900; font-size:11px; border-radius:20px;">SAVE ৳${oldP - baseP}</span>`; }
-}
-function updateMirrorPrice(radio) {
-  let is30 = radio.value === '30cm'; let oldP = is30 ? 3600 : 4200; let baseP = is30 ? 3099 : 3599;
-  if (gameDiscountActive) { document.getElementById('mirrorPriceRow').innerHTML = `<div style="display:flex; align-items:center; gap:15px;"><span style="text-decoration:line-through; color:var(--text-muted); font-size:15px; font-weight:700;">৳${oldP}</span><span style="font-size:28px; font-weight:900; color:var(--accent-2);">৳${is30 ? 2789 : 3239}</span></div><span style="background:rgba(5,217,232,0.2); color:var(--accent-2); padding:8px 14px; font-weight:900; font-size:11px; border-radius:20px;">10% OFF</span>`; } 
-  else { document.getElementById('mirrorPriceRow').innerHTML = `<div style="display:flex; align-items:center; gap:15px;"><span style="text-decoration:line-through; color:var(--text-muted); font-size:15px; font-weight:700;">৳${oldP}</span><span style="font-size:28px; font-weight:900;">৳${baseP}</span></div><span style="background:rgba(255,42,109,0.2); color:var(--accent-1); padding:8px 14px; font-weight:900; font-size:11px; border-radius:20px;">SAVE ৳${oldP - baseP}</span>`; }
-}
-function buyFlagship() { openCheckout(camColors[currentColorIdx].c, currentSD); }
+// --- High-Converting Render Logic ---
+function getPriceHTML(isWithSD) {
+  let oldPrice = isWithSD ? 2699 : 2199;
+  let basePrice = isWithSD ? 2199 : 1799;
 
-renderSwatches(); updateFlagshipPrice(false); updateLeaderboard("");
+  if (gameDiscountActive) {
+    let discountedPrice = isWithSD ? 2089 : 1709;
+    let totalSaved = oldPrice - discountedPrice;
+    return '<div class="price-stack"><span class="old-price">৳' + oldPrice + '</span><span class="new-price" style="color:#0f0; text-shadow:0 0 10px #0f0;">৳' + discountedPrice + '</span></div><span class="disc-tag" style="background:#0f0; color:#000;">🎮 5% OFF APPLIED</span>';
+  } else {
+    let totalSaved = oldPrice - basePrice;
+    return '<div class="price-stack"><span class="old-price">৳' + oldPrice + '</span><span class="new-price">৳' + basePrice + '</span></div><span class="disc-tag">🔥 SAVE ৳' + totalSaved + '</span>';
+  }
+}
+
+var camData = [
+  { n:"Cloud 99 White", v:"Clean & modern", i:"cam_white.jpg", c:"White", hype:"92" },
+  { n:"Midnight Black", v:"Neon noir aesthetic", i:"cam_black.jpg", c:"Black", hype:"88" },
+  { n:"Arcade Red", v:"Bold streetwear energy", i:"cam_red.jpg", c:"Red", hype:"75" },
+  { n:"Pac-Maze Yellow", v:"Sunny 80s nostalgia", i:"cam_yellow.jpg", c:"Yellow", hype:"81" },
+  { n:"Synthwave Blue", v:"Cool coastal feel", i:"cam_blue.jpg", c:"Blue", hype:"79" },
+  { n:"Clear Gameboy", v:"Raw Y2K tech", i:"cam_transparent.jpg", c:"Transparent", hype:"95" },
+  { n:"Glitch Green", v:"90s personality", i:"cam_green.jpg", c:"Green", hype:"90" },
+  { n:"Mint Condition", v:"Rare retro drop", i:"cam_lightgreen.jpg", c:"Light Green", hype:"85" },
+  { n:"Console Grey", v:"Classic 8-bit vibes", i:"cam_grey.jpg", c:"Grey", hype:"82" }
+];
+
+function renderGrid(dataArray, gridId, prefix) {
+  var grid = document.getElementById(gridId);
+  for (var x = 0; x < dataArray.length; x++) {
+    var c = dataArray[x];
+    var card = document.createElement("div");
+    card.className = "cam-card";
+    
+    var initialPriceHTML = getPriceHTML(false); 
+    var watchers = Math.floor(Math.random() * 15) + 5; 
+    
+    card.innerHTML =
+      '<div class="img-wrapper">' +
+      '<div class="live-watch"><div class="dot"></div> WATCHING: ' + watchers + '</div>' +
+      '<img src="' + c.i + '" class="cam-img" alt="' + c.n + '" onerror="this.src=\'data:image/svg+xml;utf8,<svg xmlns=\\\'http://www.w3.org/2000/svg\\\' width=\\\'300\\\' height=\\\'200\\\'><rect width=\\\'100%\\\' height=\\\'100%\\\' fill=\\\'#333\\\'/><text x=\\\'50%\\\' y=\\\'50%\\\' font-family=\\\'monospace\\\' font-size=\\\'14\\\' fill=\\\'#fff\\\' dominant-baseline=\\\'middle\\\' text-anchor=\\\'middle\\\'>IMG MISSING</text></svg>\'" />' +
+      '</div>' +
+      '<div class="cam-info">' +
+      '<div class="cam-name">' + c.n + '</div>' +
+      '<div class="cam-vibe">' + c.v + '</div>' +
+      '<div class="hype-meter-container"><div class="hype-meter-fill" style="width: ' + c.hype + '%;"></div></div>' +
+      '<div class="hype-text">' + c.hype + '% CLAIMED</div>' +
+      '<div class="cam-perks"><span class="perk perk-highlight">>> FREE DELIVERY NATIONWIDE</span><span class="perk">>> MYSTERY GIFT CHANCE</span></div>' +
+      '<div class="variant-toggle">' +
+      '<label class="toggle-opt"><input type="radio" id="sdopt_' + prefix + x + '_without" name="sdopt' + prefix + x + '" value="without" checked onchange="updatePrice(this, \'' + prefix + x + '\'); soundClick();"> NO SD CARD</label>' +
+      '<label class="toggle-opt"><input type="radio" id="sdopt_' + prefix + x + '_with" name="sdopt' + prefix + x + '" value="with" onchange="updatePrice(this, \'' + prefix + x + '\'); soundClick();"> 8GB SD CARD</label>' +
+      '</div>' +
+      '<div class="price-row" id="priceRow' + prefix + x + '">' + initialPriceHTML + '</div>' +
+      '<button class="buy-btn" onclick="openCheckout(\'' + c.c + '\', document.getElementById(\'sdopt_' + prefix + x + '_with\').checked)">SECURE ITEM</button>' +
+      '</div>';
+    grid.appendChild(card);
+  }
+}
+
+renderGrid(camData, "camGrid", "p1_");
+
+function updatePrice(radio, index) {
+  var isWithSD = radio.value === 'with';
+  document.getElementById('priceRow' + index).innerHTML = getPriceHTML(isWithSD);
+}
+
+// --- Mirror Toggle Logic ---
+function updateMirrorPrice(radio) {
+  var priceRow = document.getElementById('mirrorPriceRow');
+  let is30 = radio.value === '30cm';
+  let oldPrice = is30 ? 3600 : 4200;
+  let basePrice = is30 ? 3099 : 3599;
+
+  if (gameDiscountActive) {
+    let discountedPrice = is30 ? 2944 : 3419;
+    let totalSaved = oldPrice - discountedPrice;
+    priceRow.innerHTML = '<div class="price-stack"><span class="old-price">৳' + oldPrice + '</span><span class="new-price" style="color:#0f0; text-shadow:0 0 10px #0f0;">৳' + discountedPrice + '</span></div><span class="disc-tag" style="background:#0f0; color:#000;">🎮 5% OFF APPLIED</span>';
+  } else {
+    let totalSaved = oldPrice - basePrice;
+    priceRow.innerHTML = '<div class="price-stack"><span class="old-price">৳' + oldPrice + '</span><span class="new-price">৳' + basePrice + '</span></div><span class="disc-tag">🔥 SAVE ৳' + totalSaved + '</span>';
+  }
+}
+
+// --- Page Tabs Logic ---
+function showPage(page) {
+  soundClick();
+  document.getElementById('tab1').className = 'page-tab' + (page === 1 ? ' active' : '');
+  document.getElementById('tab2').className = 'page-tab' + (page === 2 ? ' active' : '');
+  const bodies = ['page1Body', 'page2Body'];
+  bodies.forEach(id => document.getElementById(id).style.display = 'none');
+  const newBody = document.getElementById('page' + page + 'Body');
+  newBody.style.display = 'block'; 
+  newBody.style.opacity = '0'; 
+  newBody.style.transform = 'translateY(20px)';
+  setTimeout(() => { 
+    newBody.style.transition = 'all 0.4s ease'; 
+    newBody.style.opacity = '1'; 
+    newBody.style.transform = 'translateY(0)'; 
+  }, 10);
+}
+
+updateLeaderboard(""); 
+showPage(1);
 </script>
 </body>
 </html>
